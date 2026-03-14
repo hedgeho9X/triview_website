@@ -4,7 +4,6 @@ import CardMedia from "../components/CardMedia.astro";
 import FaqList from "../components/FaqList.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import StatGrid from "../components/StatGrid.astro";
-import VisualPlaceholder from "../components/VisualPlaceholder.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import {
   homeFaqs,
@@ -53,7 +52,7 @@ const structuredData = [
           <span class="sr-only">Key interface and control coverage is listed below.</span>
         </p>
 
-        <div class="button-row">
+        <div class="button-row hero-actions">
           <a class="button button-primary" href="/contact">Start an RFQ</a>
           <a class="button button-secondary" href="/solutions">Explore solutions</a>
         </div>
@@ -65,39 +64,28 @@ const structuredData = [
           <span class="pill">eDP</span>
           <span class="pill">USB-C</span>
           <span class="pill">RS232/RS485</span>
-          <span class="pill">OSD</span>
-          <span class="pill">Harness + panel matching</span>
         </div>
       </div>
 
-      <div class="hero-panel hero-panel-large">
-        <VisualPlaceholder
-          variant="signal"
-          label="Signal-to-Panel Fit"
-          subtitle="Controller selection · firmware tuning · harness routing"
-          decorative={true}
-        />
+      <div class="hero-panel hero-media-card">
+        <figure class="hero-media-frame" data-placeholder="Controller board image coming soon">
+          <img
+            class="hero-media-img"
+            src="/images/board/triview-hero-board-topdown-studio.png"
+            alt="TriView LCD controller board, top-down studio view"
+            width="1200"
+            height="900"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            onerror="var f=this.parentElement; if(f){f.classList.add('is-missing');} this.remove();"
+          />
+        </figure>
 
-        <p class="eyebrow">Why TriView</p>
-        <h2>One partner for controller selection, firmware behavior, cable fit, and pilot execution.</h2>
-        <p class="hero-panel-copy">
-          That matters when a display project includes legacy interfaces, constrained mechanical
-          space, or long-life procurement requirements that off-the-shelf boards do not address.
-        </p>
-
-        <div class="hero-checks">
-          <div class="check-item">
-            <strong>Panel matching, not guessing</strong>
-            <span>Match controller timing and behavior to the real LCD module, not a generic datasheet family.</span>
-          </div>
-          <div class="check-item">
-            <strong>Integration-ready cable packages</strong>
-            <span>Cleaner assembly, faster bring-up, and fewer field failures caused by harness mismatch.</span>
-          </div>
-          <div class="check-item">
-            <strong>ODM/OEM program control</strong>
-            <span>Structured validation, OSD defaults, and control behavior (including RS232/RS485 when needed) that support long-term industrial programs.</span>
-          </div>
+        <div class="hero-proof-row" aria-label="Proof points">
+          <span class="proof-chip">ODM/OEM</span>
+          <span class="proof-chip">Panel Matching</span>
+          <span class="proof-chip">Cable Integration</span>
         </div>
       </div>
     </div>

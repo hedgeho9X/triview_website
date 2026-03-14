@@ -456,7 +456,23 @@ main { min-height: 60vh; }
 }
 
 .hero-copy { animation: float-in 800ms var(--ease-out) both; }
-.hero-lead { max-width: 60ch; font-size: 1.15rem; margin-bottom: 2rem; color: var(--muted); }
+.hero-copy h1 {
+  max-width: 20ch;
+  line-height: 1.05;
+  font-weight: 675;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.1rem;
+}
+
+.hero-lead { max-width: 58ch; font-size: 1.15rem; margin-bottom: 1.75rem; color: var(--muted); }
+.hero-actions { gap: 0.9rem; }
+
+.signal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+}
 
 .hero-panel {
   padding: 2.25rem;
@@ -472,6 +488,72 @@ main { min-height: 60vh; }
 .hero-panel h2, .hero-panel strong { color: var(--ink); }
 .hero-panel .eyebrow { color: var(--muted-2); }
 .hero-panel p { color: var(--muted); }
+
+.hero-media-card {
+  padding: 1.25rem;
+  align-self: start;
+}
+
+.hero-media-frame {
+  margin: 0;
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(234, 88, 12, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+}
+
+.hero-media-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted-2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-media-frame.is-missing::after {
+  content: attr(data-placeholder);
+  opacity: 1;
+}
+
+.hero-media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-proof-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.proof-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
 
 .visual {
   margin: 0; border-radius: var(--radius); overflow: hidden;
