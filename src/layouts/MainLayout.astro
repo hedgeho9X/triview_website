@@ -136,7 +136,7 @@ const combinedStructuredData = [webSiteData, organizationData, ...pageStructured
       <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
     )}
     {alternateLinks.map((alt) => (
-      <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+      <link rel="alternate" hreflang={alt.locale.replace('zh-Hans','zh-CN').replace('zh-Hant','zh-TW')} href={alt.href} />
     ))}
 
     <meta name="twitter:card" content="summary_large_image" />
