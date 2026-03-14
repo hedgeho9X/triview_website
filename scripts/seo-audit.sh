@@ -42,6 +42,18 @@ else
   echo "  OK: All pages contain <h1>"
 fi
 
+
+
+echo
+
+echo "[2b] Pages using <PageHero> (hero component includes <h1>)"
+HERO_PAGES=$(rg -l -S "<PageHero\b" src/pages || true)
+if [[ -n "$HERO_PAGES" ]]; then
+  echo "$HERO_PAGES" | sed 's/^/  - /'
+else
+  echo "  (none)"
+fi
+
 echo
 
 echo "[3] Duplicate <h1> candidates (pages)"
