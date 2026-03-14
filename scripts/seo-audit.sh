@@ -34,28 +34,31 @@ echo
 
 echo "[2] Heading structure hints (pages)"
 # Find pages with no h1 at all
+HERO_PAGES=$(rg -l -S "<PageHero\b" src/pages || true)
 NO_H1=$(rg -L --files-without-match "<h1" src/pages || true)
 if [[ -n "$NO_H1" ]]; then
-  echo "  Pages missing <h1>:"
-  echo "$NO_H1" | sed 's/^/  - /'
+  # Exclude pages that use PageHero (PageHero renders <h1> internally)
+  FILTERED=$(comm -23 <(printf "%s
+" "$NO_H1" | sort) <(printf "%s
+" "$HERO_PAGES" | sort) || true)
+  if [[ -n "$FILTERED" ]]; then
+    echo "  Pages missing <h1> (excluding PageHero pages):"
+    echo "$FILTERED" | sed "s/^/  - /"
+  else
+    echo "  OK: No pages missing <h1> once PageHero pages are excluded"
+  fi
 else
   echo "  OK: All pages contain <h1>"
 fi
 
-
-
 echo
 
 echo "[2b] Pages using <PageHero> (hero component includes <h1>)"
-HERO_PAGES=$(rg -l -S "<PageHero\b" src/pages || true)
 if [[ -n "$HERO_PAGES" ]]; then
-  echo "$HERO_PAGES" | sed 's/^/  - /'
+  echo "$HERO_PAGES" | sed "s/^/  - /"
 else
   echo "  (none)"
 fi
-
-echo
-
 echo "[3] Duplicate <h1> candidates (pages)"
 # very rough heuristic: count h1 occurrences per file
 python3 - <<'PY'
