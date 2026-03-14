@@ -34,40 +34,40 @@ const descId = `vp-desc-${uid}`;
 
     <defs>
       <linearGradient id={`bg-${uid}`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="rgba(255,255,255,0.10)" />
-        <stop offset="0.55" stop-color="rgba(255,255,255,0.06)" />
-        <stop offset="1" stop-color="rgba(0,0,0,0.12)" />
+        <stop offset="0" stop-color="#0f172a" />
+        <stop offset="0.55" stop-color="#1e293b" />
+        <stop offset="1" stop-color="#020617" />
       </linearGradient>
 
       <radialGradient id={`glow-copper-${uid}`} cx="30%" cy="20%" r="72%">
-        <stop offset="0" stop-color="rgba(194,111,74,0.38)" />
-        <stop offset="0.55" stop-color="rgba(194,111,74,0.12)" />
-        <stop offset="1" stop-color="rgba(194,111,74,0)" />
+        <stop offset="0" stop-color="rgba(234, 88, 12, 0.3)" /> <!-- Orange -->
+        <stop offset="0.55" stop-color="rgba(234, 88, 12, 0.1)" />
+        <stop offset="1" stop-color="rgba(234, 88, 12, 0)" />
       </radialGradient>
 
       <radialGradient id={`glow-teal-${uid}`} cx="78%" cy="12%" r="74%">
-        <stop offset="0" stop-color="rgba(46,139,139,0.30)" />
-        <stop offset="0.55" stop-color="rgba(46,139,139,0.10)" />
-        <stop offset="1" stop-color="rgba(46,139,139,0)" />
+        <stop offset="0" stop-color="rgba(2, 132, 199, 0.3)" /> <!-- Tech Blue -->
+        <stop offset="0.55" stop-color="rgba(2, 132, 199, 0.1)" />
+        <stop offset="1" stop-color="rgba(2, 132, 199, 0)" />
       </radialGradient>
 
       <pattern id={`grid-${uid}`} width="44" height="44" patternUnits="userSpaceOnUse">
         <path
           d="M 44 0 H 0 V 44"
           fill="none"
-          stroke="rgba(255,255,255,0.08)"
+          stroke="rgba(255,255,255,0.06)"
           stroke-width="1"
         />
-        <circle cx="0" cy="0" r="1.3" fill="rgba(255,255,255,0.14)" />
+        <circle cx="0" cy="0" r="1.3" fill="rgba(255,255,255,0.12)" />
       </pattern>
 
       <filter id={`soft-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="10" />
+        <feGaussianBlur stdDeviation="12" />
       </filter>
     </defs>
 
-    <rect x="18" y="18" width="844" height="524" rx="36" fill={`url(#bg-${uid})`} />
-    <rect x="18" y="18" width="844" height="524" rx="36" fill={`url(#grid-${uid})`} opacity="0.85" />
+    <rect x="18" y="18" width="844" height="524" rx="24" fill={`url(#bg-${uid})`} />
+    <rect x="18" y="18" width="844" height="524" rx="24" fill={`url(#grid-${uid})`} opacity="0.85" />
 
     <g opacity="0.95">
       <circle cx="230" cy="140" r="190" fill={`url(#glow-copper-${uid})`} />
@@ -83,22 +83,22 @@ const descId = `vp-desc-${uid}`;
       >
         <path
           d="M 132 260 C 250 260 250 148 368 148 C 486 148 486 318 604 318 C 722 318 722 206 820 206"
-          stroke="rgba(255,255,255,0.42)"
+          stroke="rgba(56, 189, 248, 0.6)"
           stroke-width="2.5"
         />
         <path
           d="M 120 356 C 230 356 248 438 360 438 C 472 438 490 356 602 356 C 714 356 736 412 820 412"
-          stroke="rgba(194,111,74,0.52)"
+          stroke="rgba(249, 115, 22, 0.6)"
           stroke-width="2"
         />
         <path
           d="M 188 196 L 254 196 L 254 232"
-          stroke="rgba(46,139,139,0.62)"
-          stroke-width="2"
+          stroke="rgba(2, 132, 199, 0.8)"
+          stroke-width="2.5"
         />
         <path
           d="M 672 256 L 720 256 L 720 224"
-          stroke="rgba(255,255,255,0.35)"
+          stroke="rgba(255,255,255,0.4)"
           stroke-width="2"
         />
       </g>
@@ -116,31 +116,31 @@ const descId = `vp-desc-${uid}`;
         [820, 412]
       ].map(([x, y]) => (
         <g>
-          <circle cx={x} cy={y} r="9" fill="rgba(255,255,255,0.18)" />
-          <circle cx={x} cy={y} r="4.2" fill="rgba(255,255,255,0.62)" />
+          <circle cx={x} cy={y} r="8" fill="rgba(15, 23, 42, 0.8)" />
+          <circle cx={x} cy={y} r="4.2" fill="#38bdf8" />
         </g>
       ))}
     </g>
 
-    <g filter={`url(#soft-${uid})`} opacity="0.18">
+    <g filter={`url(#soft-${uid})`} opacity="0.25">
       <path
         d="M 110 120 C 220 80 340 120 460 100 C 600 74 720 86 820 120"
-        stroke="rgba(255,255,255,0.65)"
-        stroke-width="10"
+        stroke="#38bdf8"
+        stroke-width="12"
         fill="none"
       />
     </g>
 
-    <g font-family="IBM Plex Mono, ui-monospace, monospace">
-      <text x="72" y="462" fill="rgba(255,255,255,0.86)" font-size="15" letter-spacing="0.18em">
+    <g font-family="Inter, ui-monospace, monospace">
+      <text x="56" y="462" fill="rgba(255,255,255,0.9)" font-size="16" font-weight="600" letter-spacing="0.1em">
         {label.toUpperCase()}
       </text>
       {subtitle && (
-        <text x="72" y="492" fill="rgba(255,255,255,0.68)" font-size="14">
+        <text x="56" y="492" fill="rgba(255,255,255,0.6)" font-size="14">
           {subtitle}
         </text>
       )}
-      <text x="72" y="520" fill="rgba(255,255,255,0.48)" font-size="12">
+      <text x="56" y="520" fill="rgba(255,255,255,0.35)" font-size="12" letter-spacing="0.05em">
         {variant === "board"
           ? "REFERENCE BOARD LAYOUT (PLACEHOLDER)"
           : variant === "grid"
