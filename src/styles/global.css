@@ -88,16 +88,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(var(--line) 1px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.3;
-  z-index: -1;
-}
+/* Removed dotted background for a cleaner, Linear-like canvas */
+body::before { content: none; }
 
 a {
   color: inherit;
@@ -429,8 +421,8 @@ main { min-height: 60vh; }
 
 .button-primary:hover {
   background: #0369a1;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
+  /* No bouncy hover transforms; keep motion subtle */
+  box-shadow: 0 6px 15px rgba(2, 132, 199, 0.28);
   color: #ffffff;
 }
 
@@ -447,13 +439,14 @@ main { min-height: 60vh; }
 
 /* Eyebrow & Titles */
 .eyebrow {
-  margin-bottom: 1rem;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
+  /* No shouty eyebrow */
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--muted-2);
 }
 
 /* Hero Shell */
@@ -466,16 +459,19 @@ main { min-height: 60vh; }
 .hero-lead { max-width: 60ch; font-size: 1.15rem; margin-bottom: 2rem; color: var(--muted); }
 
 .hero-panel {
-  padding: 2.5rem;
+  padding: 2.25rem;
   border-radius: var(--radius-lg);
-  background: var(--surface-dark);
-  color: #f8fafc;
-  box-shadow: var(--shadow-xl);
+  /* Light card panel (Linear-like) */
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  box-shadow: var(--shadow-lg);
   animation: float-in 1000ms var(--ease-out) both;
 }
 
-.hero-panel h2, .hero-panel strong, .hero-panel .eyebrow { color: #ffffff; }
-.hero-panel p { color: #cbd5e1; }
+.hero-panel h2, .hero-panel strong { color: var(--ink); }
+.hero-panel .eyebrow { color: var(--muted-2); }
+.hero-panel p { color: var(--muted); }
 
 .visual {
   margin: 0; border-radius: var(--radius); overflow: hidden;
@@ -508,7 +504,7 @@ main { min-height: 60vh; }
 }
 
 .card:hover, .timeline-card:hover, .stat-card:hover {
-  transform: translateY(-4px);
+  /* No bouncy hover transforms; emphasize with border/shadow only */
   border-color: var(--line-strong);
   box-shadow: var(--shadow-lg);
 }
@@ -537,11 +533,17 @@ main { min-height: 60vh; }
 
 /* Badges / Chips */
 .pill, .chip {
-  display: inline-flex; align-items: center; padding: 0.35rem 0.85rem;
-  border-radius: 999px; background: var(--bg-subtle); border: 1px solid var(--line);
-  color: var(--ink); font-size: 0.85rem; font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
 }
-.chip-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
 /* Breadcrumbs */
 .breadcrumbs { margin-bottom: 1.5rem; }
