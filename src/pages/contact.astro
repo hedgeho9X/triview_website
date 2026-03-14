@@ -1,0 +1,147 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import InquiryForm from "../components/InquiryForm.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import VisualPlaceholder from "../components/VisualPlaceholder.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { contactAdvantages, siteConfig } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact TriView Electronics",
+  url: `${siteConfig.siteUrl}/contact`,
+  description:
+    "Contact TriView Electronics for LCD controller board RFQs, AD board projects, touch integration, cable assemblies, and OEM display support."
+};
+---
+
+<MainLayout
+  title="Contact"
+  description="Contact TriView Electronics for RFQs related to LCD controller boards, AD boards, touch modules, and custom display integration."
+  path="/contact"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Start the conversation with enough detail to move the project forward"
+    intro="The fastest TriView responses come from concise technical inputs: panel model, host interface, touch requirements, expected volume, and target schedule."
+    highlight="A good first inquiry reduces back-and-forth and helps TriView propose the right controller, accessory, or ODM/OEM path sooner."
+    actions={[
+      { href: `mailto:${siteConfig.contactEmail}`, label: "Email sales" },
+      { href: "/products", label: "Review categories", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="signal"
+      label="Inquiry Packet"
+      subtitle="Panel model · host interface · volume · schedule"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Email</strong>
+        <span>{siteConfig.contactEmail}</span>
+      </div>
+      <div>
+        <strong>Phone</strong>
+        <span>{siteConfig.contactPhone}</span>
+      </div>
+      <div>
+        <strong>Office</strong>
+        <span>{siteConfig.contactAddress}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="stack-grid">
+        <article class="card">
+          <p class="eyebrow">RFQ Checklist</p>
+          <h2>Include these points in your inquiry</h2>
+          <ul class="list-check">
+            <li>LCD panel model, size, and target resolution</li>
+            <li>Host signal type (HDMI, DP, DVI, VGA, USB-C) and target panel interface (LVDS, eDP, V-by-One)</li>
+            <li>Touch requirement, front glass concept, and enclosure limits</li>
+            <li>Control and UX requirements such as RS232/RS485, OSD defaults, and branding</li>
+            <li>Operating environment including temperature, duty cycle, and compliance needs</li>
+            <li>Sample timing, pilot build expectations, and annual forecast</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">Regional Support</p>
+          <h2>Program support for global B2B teams</h2>
+          <p>
+            TriView supports OEM teams in Taiwan, North America, Europe, and broader Asia-Pacific
+            markets. Email-first quoting is usually the most efficient way to start technical
+            review, especially when multiple stakeholders are involved.
+          </p>
+        </article>
+      </div>
+
+      <InquiryForm />
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <div>
+        <SectionHeading
+          eyebrow="Why Inquire Early"
+          title="Early technical outreach usually saves more time than late-stage troubleshooting"
+          intro="For controller board and display integration projects, the most valuable conversations often happen before a team locks the wrong interface path or cable concept."
+        />
+        <div class="card card-emphasis">
+          <ul class="list-check compact-list">
+            {contactAdvantages.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <SectionHeading
+          eyebrow="Contact Summary"
+          title="Direct contact details"
+          intro="If your team already has the panel and interface information prepared, direct outreach is the fastest path."
+        />
+
+        <div class="card-grid">
+          <article class="card">
+            <h3>Email</h3>
+            <p>
+              <a class="text-link" href={`mailto:${siteConfig.contactEmail}`}>
+                {siteConfig.contactEmail}
+              </a>
+            </p>
+          </article>
+          <article class="card">
+            <h3>Phone</h3>
+            <p>
+              <a class="text-link" href={`tel:${siteConfig.contactPhone.replaceAll("-", "")}`}>
+                {siteConfig.contactPhone}
+              </a>
+            </p>
+          </article>
+          <article class="card">
+            <h3>Office</h3>
+            <p>{siteConfig.contactAddress}</p>
+          </article>
+          <article class="card">
+            <h3>Working hours</h3>
+            <p>{siteConfig.hours}</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

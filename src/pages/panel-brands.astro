@@ -1,0 +1,134 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { siteConfig } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "TriView Electronics Supported Panel Brands",
+  url: `${siteConfig.siteUrl}/panel-brands`,
+  description:
+    "Panel brand ecosystem and compatibility guidance for TriView Electronics LCD controller board and display integration projects."
+};
+
+const brands = [
+  { name: "AUO", note: "Common industrial panel ecosystem; compatibility depends on panel model and interface." },
+  { name: "BOE", note: "Broad panel portfolio; model-specific review required." },
+  { name: "Tianma", note: "Often used in embedded/industrial devices; model matching is key." },
+  { name: "LG Display", note: "Used across commercial and industrial programs; confirm interface and timing." },
+  { name: "Innolux", note: "Common Taiwan ecosystem; often relevant for industrial replacement paths." },
+  { name: "JDI", note: "Project-dependent; confirm availability and interface constraints." },
+  { name: "Samsung Display", note: "Project-dependent; confirm panel family and lifecycle expectations." }
+];
+
+const howToConfirm = [
+  "Panel model / part number (mandatory)",
+  "Panel-side interface (LVDS / eDP / V-by-One)",
+  "Host-side signal input (HDMI / DP / DVI / VGA / USB-C)",
+  "Target resolution + refresh expectations",
+  "Mechanical constraints (mounting, connector access, cable routing)",
+  "Lifecycle expectations (replacement vs new design-in, planned service years)"
+];
+
+const disclaimers = [
+  "This page lists common panel ecosystems, not a guarantee of universal support.",
+  "Final compatibility depends on the exact panel model, interface, timing requirements, and availability.",
+  "TriView can provide a scoped recommendation after receiving a panel model and project constraints."
+];
+---
+
+<MainLayout
+  title="Supported Panel Brands"
+  description="Panel brand ecosystem and compatibility guidance for TriView Electronics controller board and display integration programs."
+  path="/panel-brands"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Ecosystem"
+    title="Panel brand compatibility is always model-specific"
+    intro="B2B buyers often ask which panel brands a controller supplier supports. The honest answer is: compatibility is determined by the panel model, interface family, and lifecycle constraints—not by brand name alone."
+    highlight="This page helps buyers prepare the right inputs so TriView can confirm compatibility quickly and traceably."
+    actions={[
+      { href: "/interface-summary", label: "View interface summary" },
+      { href: "/contact", label: "Send panel model inquiry", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Supported Panel Brands" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>What this page is</strong>
+        <span>Compatibility guidance + inquiry inputs</span>
+      </div>
+      <div>
+        <strong>What it is not</strong>
+        <span>A universal support guarantee</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Common ecosystems"
+        title="Panel brands often seen in commercial and industrial programs"
+        intro="These are common ecosystems in the display market. TriView can review compatibility when the exact model and interface constraints are provided."
+      />
+
+      <div class="card-grid">
+        {brands.map((item) => (
+          <article class="card">
+            <h2>{item.name}</h2>
+            <p>{item.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="Fast confirmation"
+          title="What to include to confirm compatibility quickly"
+          intro="If you provide these inputs in the first message, TriView can scope a recommendation path with less back-and-forth."
+        />
+        <ul class="list-check compact-list">
+          {howToConfirm.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="Scope notes"
+          title="Important disclaimers"
+          intro="These points keep the statement accurate and prevent false expectations."
+        />
+        <ul class="list-check compact-list">
+          {disclaimers.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Compatibility check"
+    title="Have a panel model? Send it and get a scoped answer."
+    body="A panel part number plus interface constraints is usually enough for a first-pass compatibility assessment, including controller + OSD/control considerations and cable-path notes."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="See compliance statements"
+    secondaryHref="/compliance"
+  />
+</MainLayout>

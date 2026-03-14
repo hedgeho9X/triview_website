@@ -1,0 +1,128 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", (entry) => !entry.data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+const pageUrl = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
+const dateLocale = locale === "zh-Hant" ? "zh-TW" : locale === "zh-Hans" ? "zh-CN" : "en";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.publishDate).toISOString(),
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl
+  },
+  author: {
+    "@type": "Organization",
+    name: siteConfig.legalName,
+    url: siteConfig.siteUrl
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.legalName,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/og-default.svg", siteConfig.siteUrl).toString()
+    }
+  }
+};
+---
+
+<MainLayout
+  title={post.data.title}
+  description={post.data.description}
+  path={`/resources/${post.slug}`}
+  type="article"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Resource"
+    title={post.data.title}
+    intro={post.data.description}
+    highlight="Replace placeholder visuals with photos, diagrams, and application imagery as the resource library grows."
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "Discuss a project" },
+      { href: withLocale(locale, "/resources"), label: "Back to resources", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: withLocale(locale, "/") },
+          { label: "Resources", href: withLocale(locale, "/resources") },
+          { label: post.data.title }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="grid"
+      label="Article"
+      subtitle={post.data.tags.slice(0, 3).join(" · ") || "TriView resource note"}
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Published</strong>
+        <span>
+          {post.data.publishDate.toLocaleDateString(dateLocale, {
+            year: "numeric",
+            month: "long",
+            day: "2-digit"
+          })}
+        </span>
+      </div>
+      <div>
+        <strong>Tags</strong>
+        <span>{post.data.tags.join(", ") || "General"}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next Step"
+    title="Turn this note into a real RFQ packet."
+    body="Send the panel model, host interface, and schedule target. TriView can confirm feasibility and propose a clean evaluation plan."
+    primaryLabel="Contact TriView"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="Browse products"
+    secondaryHref={withLocale(locale, "/products")}
+  />
+</MainLayout>

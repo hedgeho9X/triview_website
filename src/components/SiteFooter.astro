@@ -1,0 +1,70 @@
+---
+import { navigationPrimary, navigationSecondary, productCategories, siteConfig } from "../data/site";
+import { getLocaleFromUrl, withLocale } from "../i18n/routing";
+import { t, tf } from "../i18n/ui";
+
+const year = new Date().getFullYear();
+const locale = getLocaleFromUrl(Astro.url.pathname);
+const localNameLang = locale === "zh-Hant" ? "zh-Hant" : "zh-Hans";
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand footer-brand" href={withLocale(locale, "/")}>
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span>
+          <strong>{siteConfig.name}</strong>
+          <small>
+            <span lang={localNameLang}>{t(locale, "brand_local")}</span>
+          </small>
+        </span>
+      </a>
+      <p class="footer-copy">
+        {t(locale, "footer_copy")}
+      </p>
+    </div>
+
+    <div>
+      <p class="footer-title">{t(locale, "footer_explore")}</p>
+      <div class="footer-links">
+        {navigationPrimary.map((item) => (
+          <a href={withLocale(locale, item.href)}>{t(locale, item.labelKey)}</a>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-title">{t(locale, "footer_more")}</p>
+      <div class="footer-links">
+        {navigationSecondary.map((item) => (
+          <a href={withLocale(locale, item.href)}>{t(locale, item.labelKey)}</a>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-title">{t(locale, "footer_product_focus")}</p>
+      <div class="footer-links">
+        {productCategories.slice(0, 4).map((item) => (
+          <a href={withLocale(locale, `/products/${item.slug}`)}>{item.title}</a>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-title">{t(locale, "footer_contact")}</p>
+      <div class="footer-links footer-contact">
+        <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+        <a href={`tel:${siteConfig.contactPhone.replaceAll("-", "")}`}>{siteConfig.contactPhone}</a>
+        <span>{siteConfig.contactAddress}</span>
+        <span>{siteConfig.hours}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>{tf(locale, "footer_rights", { year, legalName: siteConfig.legalName })}</p>
+    <p>{t(locale, "footer_built_with")}</p>
+  </div>
+</footer>

@@ -1,0 +1,160 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import InquiryForm from "../../components/InquiryForm.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const contactAdvantages = [
+  "支援新導入與替換專案的 RFQ/詢價",
+  "面向面板相容與訊號轉換的工程評審",
+  "客製線束與韌體配套的試產協同",
+  "當詢價包含面板型號、主機訊號與機構限制時，可顯著加快評估速度"
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "聯絡宇睿電子",
+  url: `${siteConfig.siteUrl}/zh-Hant/contact`,
+  description:
+    "聯絡宇睿電子，取得 LCD 控制板、AD 板、觸控整合、線纜線束配套與 OEM 顯示支援的詢價與技術評審。"
+};
+---
+
+<MainLayout
+  title="聯絡我們"
+  description="聯絡宇睿電子，取得 LCD 控制板、AD 板、觸控模組與顯示整合相關的詢價與技術評審支援。"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="聯絡我們"
+    title="用足夠清楚的資訊開啟溝通，讓專案更快進入可執行路徑"
+    intro="宇睿最快的回應來自簡潔、關鍵的工程輸入：面板型號、主機介面、觸控需求、預估量與目標時程。"
+    highlight="高品質的首次詢價能減少往返溝通，並更快鎖定合適的控制板、配套硬體與 ODM/OEM 合作方式。"
+    actions={[
+      { href: `mailto:${siteConfig.contactEmail}`, label: "Email 聯絡" },
+      { href: withLocale(locale, "/products"), label: "查看產品類別", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "首頁", href: withLocale(locale, "/") },
+          { label: "聯絡我們" }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="signal"
+      label="詢價資訊包"
+      subtitle="面板型號 · 主機介面 · 預估量 · 時程"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Email</strong>
+        <span>{siteConfig.contactEmail}</span>
+      </div>
+      <div>
+        <strong>電話</strong>
+        <span>{siteConfig.contactPhone}</span>
+      </div>
+      <div>
+        <strong>辦公地點</strong>
+        <span>{siteConfig.contactAddress}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="stack-grid">
+        <article class="card">
+          <p class="eyebrow">RFQ / 詢價清單</p>
+          <h2>建議在首次詢價中包含</h2>
+          <ul class="list-check">
+            <li>LCD 面板型號、尺寸與目標解析度</li>
+            <li>主機訊號類型（HDMI/DP/DVI/VGA/USB-C）與目標面板介面（LVDS/eDP/V-by-One）</li>
+            <li>觸控需求、前玻璃/機構概念與機內空間限制</li>
+            <li>控制與體驗需求，例如 RS232/RS485、OSD 預設值與品牌化</li>
+            <li>工作環境（溫度、占空比）與合規需求</li>
+            <li>打樣節奏、試產計畫與年度預估量</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <p class="eyebrow">區域支援</p>
+          <h2>面向全球 B2B 團隊的專案支援</h2>
+          <p>
+            宇睿支援台灣、北美、歐洲與亞太地區的 OEM 團隊。對於需要多方協作的專案，Email 優先通常是啟動技術評審與報價的最有效方式。
+          </p>
+        </article>
+      </div>
+
+      <InquiryForm />
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <div>
+        <SectionHeading
+          eyebrow="為什麼建議提前溝通"
+          title="早期技術溝通往往比後期救火更省時間"
+          intro="在控制板與顯示整合專案中，最有價值的對話往往發生在團隊還沒鎖死錯誤介面路徑或線束方案之前。"
+        />
+        <div class="card card-emphasis">
+          <ul class="list-check compact-list">
+            {contactAdvantages.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <SectionHeading
+          eyebrow="聯絡方式彙總"
+          title="直接聯絡資訊"
+          intro="如果你已準備好面板與介面資訊，直接聯絡是最快的路徑。"
+        />
+
+        <div class="card-grid">
+          <article class="card">
+            <h3>Email</h3>
+            <p>
+              <a class="text-link" href={`mailto:${siteConfig.contactEmail}`}>
+                {siteConfig.contactEmail}
+              </a>
+            </p>
+          </article>
+          <article class="card">
+            <h3>電話</h3>
+            <p>
+              <a class="text-link" href={`tel:${siteConfig.contactPhone.replaceAll("-", "")}`}>
+                {siteConfig.contactPhone}
+              </a>
+            </p>
+          </article>
+          <article class="card">
+            <h3>辦公地點</h3>
+            <p>{siteConfig.contactAddress}</p>
+          </article>
+          <article class="card">
+            <h3>工作時間</h3>
+            <p>{siteConfig.hours}</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+

@@ -1,0 +1,138 @@
+---
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import CallToAction from "../../../components/CallToAction.astro";
+import CardMedia from "../../../components/CardMedia.astro";
+import PageHero from "../../../components/PageHero.astro";
+import SectionHeading from "../../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../../components/VisualPlaceholder.astro";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import { siteConfig, solutions } from "../../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "宇睿電子解決方案",
+  url: `${siteConfig.siteUrl}/zh-Hant/solutions`,
+  description:
+    "面向 LCD 控制板與顯示子系統的 ODM/OEM 合作路徑，包括客製整合、生命周期遷移與工業 HMI 協調等。",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: solutions.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.siteUrl}/zh-Hant/solutions/${item.slug}`,
+      name: item.title
+    }))
+  }
+};
+---
+
+<MainLayout
+  title="解決方案"
+  description="了解宇睿電子的合作路徑：客製 LCD 控制板開發、替換與生命周期遷移，以及工業顯示子系統與觸控/HMI 協調。"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="解決方案"
+    title="按專案階段與交付邊界選擇更合適的合作方式"
+    intro="宇睿不只提供控制板，更關注工程範圍、生命周期風險與製造準備度之間的關鍵決策點，協助團隊在早期建立清楚路徑。"
+    highlight="選擇最匹配當前階段的方案路徑：新開發、生命周期遷移、HMI 子系統整合或商用部署支援。"
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "溝通專案需求" },
+      { href: withLocale(locale, "/products"), label: "瀏覽產品類別", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "首頁", href: withLocale(locale, "/") },
+          { label: "解決方案" }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="signal"
+      label="合作路徑"
+      subtitle="客製整合 · 生命周期遷移 · HMI 協調"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>合作類型</strong>
+        <span>ODM、OEM、客製整合、生命周期支援</span>
+      </div>
+      <div>
+        <strong>典型交付物</strong>
+        <span>硬體板卡、韌體、線束、驗證支援、試產協同</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {solutions.map((item) => (
+        <article class="card card-link">
+          <CardMedia label={item.title} />
+          <p class="eyebrow">{item.kicker}</p>
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check">
+            {item.benefits.slice(0, 3).map((benefit) => (
+              <li>{benefit}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={withLocale(locale, `/solutions/${item.slug}`)}>
+            打開方案頁面
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="工程基礎模組"
+          title="每條解決方案背後的共通技術骨架"
+          intro="客戶目標可能不同，但成功的顯示專案往往共享一組可復用的工程工作包。"
+        />
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>控制架構與訊號路徑</h3>
+          <p>圍繞實際面板與主機系統，選擇合適的晶片與訊號路徑，而不是僅以「可點亮」判斷。</p>
+        </article>
+        <article class="card">
+          <h3>韌體行為與控制邏輯</h3>
+          <p>對齊 EDID、OSD 預設值、啟動邏輯與控制回應（需要時含 RS232/RS485），匹配產品使用情境。</p>
+        </article>
+        <article class="card">
+          <h3>線束與連接器適配</h3>
+          <p>把機構與可維護性細節納入範圍，解決通用套件常忽略的裝配與服務問題。</p>
+        </article>
+        <article class="card">
+          <h3>驗證與放行</h3>
+          <p>把「樣機可用」轉化為「量產可控」，降低隱藏假設與後續返工。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="需要建議？"
+    title="先從問題出發，而不是從料號出發。"
+    body="如果團隊仍在評估面板選擇、訊號轉換或控制架構，宇睿可協助在成本與進度開始漂移前收斂正確路徑。"
+    primaryLabel="聯絡宇睿"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="查看產品類別"
+    secondaryHref={withLocale(locale, "/products")}
+  />
+</MainLayout>
+

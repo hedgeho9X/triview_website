@@ -1,0 +1,225 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import CardMedia from "../../components/CardMedia.astro";
+import FaqList from "../../components/FaqList.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig, solutions, type Solution } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+export function getStaticPaths() {
+  return solutions.map((solution) => ({
+    params: { slug: solution.slug },
+    props: { solution }
+  }));
+}
+
+interface Props {
+  solution: Solution;
+}
+
+const { solution } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const relatedResourceSlugsBySolution: Record<string, string[]> = {
+  "custom-display-integration": ["controller-board-selection-checklist", "touch-integration-pitfalls"],
+  "legacy-display-replacement": ["legacy-display-replacement-plan"],
+  "touch-and-hmi-subsystems": ["touch-integration-pitfalls", "controller-board-selection-checklist"]
+};
+
+const resourceSlugs = relatedResourceSlugsBySolution[solution.slug] ?? [];
+const resources = resourceSlugs.length
+  ? resourceSlugs
+      .map((slug) => slug.trim())
+      .filter(Boolean)
+  : [];
+
+const posts = resources.length ? await getCollection("blog", (entry) => !entry.data.draft) : [];
+const relatedResources = resources
+  .map((slug) => posts.find((post) => post.slug === slug))
+  .filter((post): post is CollectionEntry<"blog"> => Boolean(post));
+
+const pageUrl = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: solution.title,
+  url: pageUrl,
+  description: solution.seoDescription,
+  provider: {
+    "@type": "Organization",
+    name: siteConfig.legalName,
+    url: siteConfig.siteUrl
+  },
+  areaServed: ["Taiwan", "North America", "Europe", "Asia-Pacific"]
+};
+---
+
+<MainLayout
+  title={solution.title}
+  description={solution.seoDescription}
+  path={`/solutions/${solution.slug}`}
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow={solution.kicker}
+    title={solution.title}
+    intro={solution.summary}
+    highlight={solution.heroHighlight}
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "Request project review" },
+      { href: withLocale(locale, "/products"), label: "Related product categories", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: withLocale(locale, "/") },
+          { label: "Solutions", href: withLocale(locale, "/solutions") },
+          { label: solution.title }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="signal"
+      label={solution.title}
+      subtitle="Placeholder engagement visual (replace with diagrams or case photos)"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Best fit</strong>
+        <span>{solution.useCases.slice(0, 2).join(" and ")}</span>
+      </div>
+      <div>
+        <strong>Typical output</strong>
+        <span>{solution.deliverables[0]}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Benefits"
+          title="What this solution improves"
+          intro="These benefits matter most when a display project has to balance technical fit, schedule speed, and long-term supportability."
+        />
+      </div>
+      <div class="card-grid">
+        {solution.benefits.map((item) => (
+          <article class="card">
+            <h3>{item}</h3>
+            <p>
+              This workstream reduces integration friction and helps convert technical intent into a
+              cleaner production-ready implementation.
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Deliverables"
+          title="What TriView typically provides"
+          intro="Deliverables are tailored to the project, but these outputs are the common backbone for repeatable execution."
+        />
+      </div>
+      <div class="card-grid">
+        {solution.deliverables.map((item) => (
+          <article class="card">
+            <h3>{item}</h3>
+            <p>
+              Structured output improves handoff quality across engineering, sourcing, and factory
+              execution.
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div class="card card-emphasis">
+        <p class="eyebrow">Ideal Use Cases</p>
+        <h2>Projects that match this solution especially well</h2>
+        <ul class="list-check">
+          {solution.useCases.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="card">
+        <p class="eyebrow">Execution Path</p>
+        <h2>Typical program flow</h2>
+        <ol class="number-list">
+          {solution.process.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {relatedResources.length > 0 && (
+    <section class="section section-contrast">
+      <div class="container">
+        <SectionHeading
+          eyebrow="Resources"
+          title="Related checklists and migration notes"
+          intro="These short resources help teams align on panel facts, interfaces, firmware/OSD expectations, control I/O, and replacement constraints before the scope hardens."
+        />
+
+        <div class="card-grid">
+          {relatedResources.map((post) => (
+            <article class="card card-link">
+              <CardMedia label={post.data.title} />
+              <p class="eyebrow">Resource</p>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+              <a class="text-link" href={withLocale(locale, `/resources/${post.slug}`)}>
+                Read resource
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section-tight">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Questions"
+        title="Common questions about this solution"
+        intro="If your project has unusual panel constraints, a quick technical review with TriView can confirm fit faster than generic quoting."
+      />
+      <FaqList items={solution.faqs} />
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next Step"
+    title="Use this solution brief as a starting point for your RFQ."
+    body="Share the panel model, host interface, form factor constraints, and expected volume so TriView can recommend the fastest viable path."
+    primaryLabel="Contact TriView"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="Back to solutions"
+    secondaryHref={withLocale(locale, "/solutions")}
+  />
+</MainLayout>

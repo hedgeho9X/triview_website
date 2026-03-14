@@ -1,0 +1,112 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { applicationTracks, industryPages, productCategories, siteConfig, solutions } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "TriView Electronics Applications",
+  url: `${siteConfig.siteUrl}/applications`,
+  description:
+    "Application-focused guidance for legacy display replacement, new OEM design-in, and touch-enabled HMI integration."
+};
+---
+
+<MainLayout
+  title="Applications"
+  description="Explore common application paths for TriView Electronics, including display replacement, OEM design-in, and touch-enabled HMI integration."
+  path="/applications"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Applications"
+    title="Application paths help buyers connect products, solutions, and industry realities"
+    intro="Many B2B visitors do not search by controller-board taxonomy. They search by project situation: replacement, new design-in, integration cleanup, or faster qualification."
+    highlight="This page makes the site easier to navigate from a buyer-intent perspective instead of only a product-category perspective."
+    actions={[
+      { href: "/contact", label: "Discuss your project" },
+      { href: "/products", label: "Browse product categories", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Applications" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Buyer intent</strong>
+        <span>Replacement, design-in, touch integration, deployment stability</span>
+      </div>
+      <div>
+        <strong>Connected content</strong>
+        <span>{productCategories.length} product groups · {solutions.length} solution tracks · {industryPages.length} industry snapshots</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container stack-grid">
+      {applicationTracks.map((item) => (
+        <section class="card industry-deep-dive">
+          <SectionHeading eyebrow="Application Track" title={item.title} intro={item.summary} />
+
+          <div class="split-grid split-grid-balanced">
+            <article class="card">
+              <h3>Common buyer needs</h3>
+              <ul class="list-check compact-list">
+                {item.needs.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article class="card card-emphasis">
+              <h3>Why this matters</h3>
+              <p>{item.fit}</p>
+              <p><a class="text-link" href={`/applications/${item.slug}`}>Open application page</a></p>
+            </article>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container triple-grid">
+      <article class="card">
+        <p class="eyebrow">Products</p>
+        <h3>Start from hardware categories</h3>
+        <p>Useful when you already know the controller type, accessory family, or display subsystem scope you need.</p>
+        <a class="text-link" href="/products">View products</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Solutions</p>
+        <h3>Start from engineering approach</h3>
+        <p>Useful when the project problem is broader than a single part and requires coordinated design support.</p>
+        <a class="text-link" href="/solutions">View solutions</a>
+      </article>
+
+      <article class="card">
+        <p class="eyebrow">Industries</p>
+        <h3>Start from operating context</h3>
+        <p>Useful when lifecycle, service, compliance, or field conditions shape the right display strategy.</p>
+        <a class="text-link" href="/industries">View industries</a>
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Project Fit"
+    title="Need help deciding whether to navigate by product, solution, or application?"
+    body="If you share your panel model, host signal, target volume, and whether the program is a replacement or new design, TriView can help route you toward the right evaluation path."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="See industries"
+    secondaryHref="/industries"
+  />
+</MainLayout>

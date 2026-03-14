@@ -1,0 +1,164 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { applicationTracks, industryPages, siteConfig, solutions } from "../data/site";
+
+const useCases = [
+  {
+    slug: "aging-industrial-hmi-replacement",
+    title: "Replacing an aging industrial HMI display path",
+    context:
+      "A manufacturer needs to keep a long-life machine platform in service, but the original display path is becoming harder to source and support.",
+    needs: [
+      "Preserve installed-base continuity",
+      "Reduce redesign pressure",
+      "Validate a lower-risk controller and cable path"
+    ],
+    route: [
+      { href: "/use-cases/aging-industrial-hmi-replacement", label: "Open use case" },
+      { href: "/solutions/legacy-display-replacement", label: "Legacy Display Replacement" },
+      { href: "/industries/industrial-automation", label: "Industrial Automation" }
+    ]
+  },
+  {
+    slug: "oem-embedded-display-design-in",
+    title: "Designing a new OEM embedded display subsystem",
+    context:
+      "A product team is early in development and wants to align panel, controller, touch, and cable decisions before the architecture hardens.",
+    needs: [
+      "Avoid late integration rework",
+      "Improve prototype-to-production continuity",
+      "Clarify subsystem scope early"
+    ],
+    route: [
+      { href: "/use-cases/oem-embedded-display-design-in", label: "Open use case" },
+      { href: "/solutions/custom-display-integration", label: "Custom Display Integration" },
+      { href: "/capabilities", label: "Capabilities" }
+    ]
+  },
+  {
+    slug: "touch-enabled-kiosk-rollout-stability",
+    title: "Stabilizing a touch-enabled kiosk or operator interface rollout",
+    context:
+      "A commercial deployment needs display and touch behavior to remain consistent across installation batches and field environments.",
+    needs: [
+      "Align touch and display behavior",
+      "Reduce field installation surprises",
+      "Support cleaner accessory planning"
+    ],
+    route: [
+      { href: "/use-cases/touch-enabled-kiosk-rollout-stability", label: "Open use case" },
+      { href: "/solutions/touch-and-hmi-subsystems", label: "Touch & HMI Subsystems" },
+      { href: "/industries/kiosks-and-signage", label: "Kiosks & Signage" }
+    ]
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "TriView Electronics Use Cases",
+  url: `${siteConfig.siteUrl}/use-cases`,
+  description:
+    "Use-case style guidance showing how TriView Electronics may fit legacy replacement, OEM design-in, and touch-enabled HMI projects."
+};
+---
+
+<MainLayout
+  title="Use Cases"
+  description="Explore use-case style project scenarios for TriView Electronics across industrial replacement, OEM design-in, and touch-enabled display integration."
+  path="/use-cases"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Use Cases"
+    title="Use-case pages help visitors connect abstract capabilities to concrete project situations"
+    intro="Many B2B buyers understand their need better through a scenario than through a specification list. Use-case framing turns a technical website into a more decision-oriented experience."
+    highlight="This page supports both conversion and SEO by translating products, solutions, and industries into recognizable project narratives."
+    actions={[
+      { href: "/contact", label: "Discuss your use case" },
+      { href: "/resources", label: "Open resources hub", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Use Cases" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Connected pages</strong>
+        <span>{solutions.length} solutions · {industryPages.length} industries · {applicationTracks.length} applications</span>
+      </div>
+      <div>
+        <strong>Audience</strong>
+        <span>OEM buyers, industrial engineers, display integration teams, replacement-driven programs</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container stack-grid">
+      {useCases.map((item) => (
+        <section class="card industry-deep-dive">
+          <SectionHeading eyebrow="Scenario" title={item.title} intro={item.context} />
+
+          <div class="split-grid split-grid-balanced">
+            <article class="card">
+              <h3>Typical project needs</h3>
+              <ul class="list-check compact-list">
+                {item.needs.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article class="card card-emphasis">
+              <h3>Suggested navigation route</h3>
+              <ul class="list-check compact-list">
+                {item.route.map((entry) => (
+                  <li>
+                    <a class="text-link" href={entry.href}>{entry.label}</a>
+                    <span class="muted"> — {entry.href}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="Why this matters"
+          title="Use cases reduce the gap between supplier messaging and buyer reality"
+          intro="They make it easier for visitors to say, 'this looks like my project,' which is often the turning point between passive browsing and active inquiry."
+        />
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="SEO value"
+          title="Scenario-led pages support richer long-tail search intent"
+          intro="They also strengthen internal links between higher-level problem framing and the more detailed product or solution pages underneath."
+        />
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Project discussion"
+    title="If one of these scenarios is close to your situation, the next step is a short technical conversation"
+    body="Share the panel model, signal path, lifecycle pressure, and deployment constraints. TriView can then narrow a more relevant evaluation route across products, solutions, and applications."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View solutions"
+    secondaryHref="/solutions"
+  />
+</MainLayout>

@@ -1,0 +1,109 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import FaqList from "../components/FaqList.astro";
+import PageHero from "../components/PageHero.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { homeFaqs, siteConfig } from "../data/site";
+
+const extendedFaqs = [
+  ...homeFaqs,
+  {
+    question: "Where is TriView Electronics located?",
+    answer:
+      "TriView Electronics is based in Tainan, Taiwan, supporting B2B OEM programs across Asia-Pacific, North America, and Europe."
+  },
+  {
+    question: "Which display interfaces can TriView support?",
+    answer:
+      "Projects commonly involve panel interfaces such as eDP, LVDS, and V-by-One, and host-side inputs such as HDMI, DisplayPort, DVI, VGA, or USB-C depending on the system. Share your panel model and host output to confirm the best path."
+  },
+  {
+    question: "Can TriView customize OSD and control behavior?",
+    answer:
+      "Yes. TriView can align firmware behavior to product requirements, including OSD defaults, language and lock settings, boot behavior, and control methods such as UART/RS232/RS485 when required."
+  },
+  {
+    question: "Does TriView support low-to-mid volume OEM projects?",
+    answer:
+      "Yes. TriView’s ODM/OEM workflow is built for industrial programs where revision control, validation discipline, and predictable production handoff matter as much as unit cost."
+  },
+  {
+    question: "Can TriView help with legacy display replacement?",
+    answer:
+      "Yes. TriView supports legacy replacement and controlled migration work, including interface conversion and panel matching when the original display path is aging out or hard to source."
+  },
+  {
+    question: "What should be included in a first inquiry?",
+    answer:
+      "A strong first inquiry includes the LCD panel model, host signal type, panel interface (LVDS/eDP/V-by-One), touch requirements, mechanical limits, environment, target schedule, and whether you need RS232/RS485 control or OSD customization."
+  },
+  {
+    question: "Why are cable assemblies and touch modules discussed alongside controller boards?",
+    answer:
+      "Because cable routing, connector choice, shielding, and service access often decide whether a display subsystem is stable in pilot and field deployments. TriView treats the harness and touch integration as part of the scope, not an afterthought."
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: extendedFaqs.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer
+    }
+  }))
+};
+---
+
+<MainLayout
+  title="FAQ"
+  description="Frequently asked questions about TriView Electronics, LCD controller boards, display integration, legacy replacement, and OEM inquiry preparation."
+  path="/faq"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="FAQ"
+    title="Frequently asked questions for OEM and industrial display buyers"
+    intro="These answers cover common discovery-stage questions from OEM teams evaluating a controller board, an AD board, or a display-integration partner."
+    highlight="If your project includes eDP/LVDS/V-by-One panels, USB-C hosts, RS232/RS485 control, or OSD customization, include that context in the first inquiry for faster scoping."
+    actions={[
+      { href: "/contact", label: "Send an inquiry" },
+      { href: "/capabilities", label: "View capabilities", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Best for</strong>
+        <span>Early-stage RFQ prep, internal alignment, and fast project scoping</span>
+      </div>
+      <div>
+        <strong>Topics</strong>
+        <span>Interfaces, panel matching, OSD, RS232/RS485 control, touch, cables, replacement work</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <FaqList items={extendedFaqs} />
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Still evaluating?"
+    title="If your question is project-specific, bring the technical context into the first message"
+    body="The more complete the first inquiry is, the faster TriView can assess compatibility, risk, and the likely integration path."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View applications"
+    secondaryHref="/applications"
+  />
+</MainLayout>

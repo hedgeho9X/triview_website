@@ -1,0 +1,134 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { industryPages, siteConfig, type IndustryPage } from "../../data/site";
+
+export function getStaticPaths() {
+  return industryPages.map((industry) => ({
+    params: { slug: industry.slug },
+    props: { industry }
+  }));
+}
+
+const { industry } = Astro.props as { industry: IndustryPage };
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: industry.title,
+  url: `${siteConfig.siteUrl}/industries/${industry.slug}`,
+  description: industry.seoDescription
+};
+---
+
+<MainLayout
+  title={industry.title}
+  description={industry.seoDescription}
+  path={`/industries/${industry.slug}`}
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow={industry.kicker}
+    title={industry.title}
+    intro={industry.summary}
+    highlight="TriView is most valuable when display control decisions are aligned with industry-specific lifecycle, validation, and deployment constraints."
+    actions={[
+      { href: "/contact", label: "Discuss this industry project" },
+      { href: "/industries", label: "Back to industries", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Industries", href: "/industries" },
+          { label: industry.title }
+        ]}
+      />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Industry priorities</strong>
+        <span>{industry.priorities.slice(0, 2).join(" · ")}</span>
+      </div>
+      <div>
+        <strong>Typical fit</strong>
+        <span>{industry.triViewFit[0]}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container triple-grid">
+      <article class="card">
+        <h3>Typical challenges</h3>
+        <ul class="list-check compact-list">
+          {industry.challenges.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Buyer priorities</h3>
+        <ul class="list-check compact-list">
+          {industry.priorities.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="card card-emphasis">
+        <h3>Where TriView fits</h3>
+        <ul class="list-check compact-list">
+          {industry.triViewFit.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <div>
+        <SectionHeading
+          eyebrow="Engineering View"
+          title="Why industry-specific framing improves display integration decisions"
+          intro="A controller board rarely succeeds or fails in isolation. The outcome depends on lifecycle pressure, service access, enclosure design, and qualification expectations in the target market."
+        />
+      </div>
+
+      <div class="stack-grid">
+        <article class="card">
+          <h3>What this means in practice</h3>
+          <p>
+            For {industry.title.toLowerCase()}, the right path usually combines controller selection,
+            cable planning, validation discipline, and a sourcing strategy that reduces surprise redesigns.
+          </p>
+        </article>
+        <article class="card">
+          <h3>How to shorten evaluation time</h3>
+          <p>
+            Share the panel model, host interface, environment constraints, expected product life, and service model early.
+            That information helps TriView narrow a better-fit hardware and integration route much faster.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Industry Inquiry"
+    title={`Planning a ${industry.title.toLowerCase()} program?`}
+    body="Bring the application context into the first discussion, not only the part number. That usually leads to a more stable board, cable, and firmware decision." 
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View application paths"
+    secondaryHref="/applications"
+  />
+</MainLayout>

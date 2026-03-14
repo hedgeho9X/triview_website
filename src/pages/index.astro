@@ -1,0 +1,268 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import CardMedia from "../components/CardMedia.astro";
+import FaqList from "../components/FaqList.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import StatGrid from "../components/StatGrid.astro";
+import VisualPlaceholder from "../components/VisualPlaceholder.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import {
+  homeFaqs,
+  industries,
+  productCategories,
+  siteConfig,
+  solutions,
+  stats,
+  trustPoints,
+  workflowSteps
+} from "../data/site";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: siteConfig.defaultTitle,
+    url: siteConfig.siteUrl,
+    description: siteConfig.defaultDescription
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: homeFaqs.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  }
+];
+---
+
+<MainLayout structuredData={structuredData}>
+  <section class="section hero-shell">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Taiwan LCD Controller Board ODM/OEM</p>
+        <h1>Display control engineering for OEM teams who cannot afford integration drift.</h1>
+        <p class="hero-lead">
+          TriView Electronics (宇睿电子) is a Tainan, Taiwan ODM/OEM partner delivering LCD controller
+          boards, AD boards, touch-ready display subsystems, and cable integration support for
+          industrial, medical, kiosk, and embedded electronics programs.
+          <span class="sr-only">Key interface and control coverage is listed below.</span>
+        </p>
+
+        <div class="button-row">
+          <a class="button button-primary" href="/contact">Start an RFQ</a>
+          <a class="button button-secondary" href="/solutions">Explore solutions</a>
+        </div>
+
+        <div class="signal-row" aria-label="Key interface and control coverage">
+          <span class="pill">HDMI</span>
+          <span class="pill">DisplayPort</span>
+          <span class="pill">DVI</span>
+          <span class="pill">VGA</span>
+          <span class="pill">LVDS</span>
+          <span class="pill">eDP</span>
+          <span class="pill">V-by-One</span>
+          <span class="pill">USB-C</span>
+          <span class="pill">RS232/RS485</span>
+          <span class="pill">OSD Customization</span>
+          <span class="pill">Panel Matching</span>
+        </div>
+      </div>
+
+      <div class="hero-panel hero-panel-large">
+        <VisualPlaceholder
+          variant="signal"
+          label="Signal-to-Panel Fit"
+          subtitle="Controller selection · firmware tuning · harness routing"
+          decorative={true}
+        />
+
+        <p class="eyebrow">Why TriView</p>
+        <h2>One partner for controller selection, firmware behavior, cable fit, and pilot execution.</h2>
+        <p class="hero-panel-copy">
+          That matters when a display project includes legacy interfaces, constrained mechanical
+          space, or long-life procurement requirements that off-the-shelf boards do not address.
+        </p>
+
+        <div class="hero-checks">
+          <div class="check-item">
+            <strong>Panel matching, not guessing</strong>
+            <span>Match controller timing and behavior to the real LCD module, not a generic datasheet family.</span>
+          </div>
+          <div class="check-item">
+            <strong>Integration-ready cable packages</strong>
+            <span>Cleaner assembly, faster bring-up, and fewer field failures caused by harness mismatch.</span>
+          </div>
+          <div class="check-item">
+            <strong>ODM/OEM program control</strong>
+            <span>Structured validation, OSD defaults, and control behavior (including RS232/RS485 when needed) that support long-term industrial programs.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tight">
+    <div class="container">
+      <StatGrid items={stats} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Product Categories"
+        title="Controller boards and integration hardware designed for real OEM workflows"
+        intro="TriView covers the board-level and accessory-level layers that determine whether a display program moves smoothly from sample approval to stable production."
+      />
+
+      <div class="card-grid">
+        {productCategories.map((item) => (
+          <article class="card card-link">
+            <CardMedia label={item.title} />
+            <p class="eyebrow">{item.kicker}</p>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <ul class="list-check">
+              {item.features.slice(0, 3).map((feature) => (
+                <li>{feature}</li>
+              ))}
+            </ul>
+            <a class="text-link" href={`/products/${item.slug}`}>
+              View product category
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Solutions"
+        title="Support models for custom builds, lifecycle extension, and industrial display integration"
+        intro="The most successful display programs are aligned around technical scope first. These solution tracks help OEM teams find the right engagement model quickly."
+      />
+
+      <div class="card-grid">
+        {solutions.map((item) => (
+          <article class="card">
+            <CardMedia label={item.title} />
+            <p class="eyebrow">{item.kicker}</p>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <a class="text-link" href={`/solutions/${item.slug}`}>
+              Read the solution brief
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Why OEM Teams Choose TriView"
+          title="Engineering discipline that protects schedule, integration quality, and supply continuity"
+          intro="For B2B display projects, the main risk is rarely just the board. It is the combination of board behavior, firmware fit, cable routing, enclosure constraints, and support responsiveness."
+        />
+      </div>
+
+      <div class="stack-grid">
+        {trustPoints.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Program Workflow"
+        title="A repeatable path from requirement capture to volume-ready display control"
+        intro="TriView is structured for industrial timelines, where validation and revision clarity are as important as technical feasibility."
+      />
+
+      <div class="timeline-grid">
+        {workflowSteps.map((item, index) => (
+          <article class="timeline-card">
+            <span class="timeline-index">Step {String(index + 1).padStart(2, "0")}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tight">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Industries"
+        title="Display integration experience across long-life, high-accountability environments"
+        intro="TriView’s mix of controller board know-how and integration support is especially relevant where product life cycles are longer and the display is operationally critical."
+      />
+
+      <div class="chip-cloud">
+        {industries.map((item) => (
+          <span class="chip">{item}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container triple-grid">
+      <article class="card">
+        <p class="eyebrow">Capabilities</p>
+        <h3>Understand supplier fit faster</h3>
+        <p>Review how TriView supports controller selection, touch coordination, cable planning, and legacy migration beyond simple part sourcing.</p>
+        <a class="text-link" href="/capabilities">View capabilities</a>
+      </article>
+      <article class="card">
+        <p class="eyebrow">Applications</p>
+        <h3>Navigate by project situation</h3>
+        <p>Start from replacement, new design-in, or touch-enabled HMI integration when product taxonomy is not the best first step.</p>
+        <a class="text-link" href="/applications">View applications</a>
+      </article>
+      <article class="card card-emphasis">
+        <p class="eyebrow">Interface Summary</p>
+        <h3>Confirm interface coverage fast</h3>
+        <p>Use one page to verify panel-side (LVDS/eDP/V-by-One), host-side (HDMI/DP/DVI/VGA/USB-C), plus OSD and RS232/RS485 control coverage.</p>
+        <a class="text-link" href="/interface-summary">Open interface summary</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="FAQ"
+        title="Common questions about TriView Electronics"
+        intro="These answers cover the most common discovery-stage questions from OEM teams evaluating a controller board or display integration partner."
+      />
+      <FaqList items={homeFaqs} />
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next Step"
+    title="Share the panel model and target interface. TriView can scope the controller path quickly."
+    body="If you already know the LCD module, host signal, touch requirement, and expected volume, TriView can outline a practical ODM/OEM path and sample plan."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View product categories"
+    secondaryHref="/products"
+  />
+</MainLayout>

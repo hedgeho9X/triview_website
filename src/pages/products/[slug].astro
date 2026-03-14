@@ -1,0 +1,241 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import CardMedia from "../../components/CardMedia.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { productCategories, siteConfig, type ProductCategory } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+export function getStaticPaths() {
+  return productCategories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category }
+  }));
+}
+
+interface Props {
+  category: ProductCategory;
+}
+
+const { category } = Astro.props;
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const relatedCategories = productCategories.filter((item) => item.slug !== category.slug).slice(0, 3);
+
+const relatedResourceSlugsByCategory: Record<string, string[]> = {
+  "lcd-controller-boards": ["controller-board-selection-checklist", "legacy-display-replacement-plan"],
+  "ad-boards-and-scaler-kits": ["legacy-display-replacement-plan", "controller-board-selection-checklist"],
+  "touch-modules": ["touch-integration-pitfalls", "controller-board-selection-checklist"],
+  "custom-cable-assemblies": ["controller-board-selection-checklist", "touch-integration-pitfalls"]
+};
+
+const resourceSlugs = relatedResourceSlugsByCategory[category.slug] ?? [];
+const resources = resourceSlugs.length
+  ? resourceSlugs
+      .map((slug) => slug.trim())
+      .filter(Boolean)
+  : [];
+
+const posts = resources.length ? await getCollection("blog", (entry) => !entry.data.draft) : [];
+const relatedResources = resources
+  .map((slug) => posts.find((post) => post.slug === slug))
+  .filter((post): post is CollectionEntry<"blog"> => Boolean(post));
+
+const pageUrl = new URL(Astro.url.pathname, siteConfig.siteUrl).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: category.title,
+  category: category.kicker,
+  description: category.seoDescription,
+  brand: {
+    "@type": "Brand",
+    name: siteConfig.name
+  },
+  manufacturer: {
+    "@type": "Organization",
+    name: siteConfig.legalName
+  },
+  url: pageUrl
+};
+---
+
+<MainLayout
+  title={category.title}
+  description={category.seoDescription}
+  path={`/products/${category.slug}`}
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow={category.kicker}
+    title={category.title}
+    intro={category.summary}
+    highlight={category.heroHighlight}
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "Request category guidance" },
+      { href: withLocale(locale, "/solutions"), label: "See matched solutions", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: withLocale(locale, "/") },
+          { label: "Products", href: withLocale(locale, "/products") },
+          { label: category.title }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="board"
+      label={category.title}
+      subtitle="Placeholder product visual (replace with real imagery later)"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Application focus</strong>
+        <span>{category.applications.slice(0, 2).join(" and ")}</span>
+      </div>
+      <div>
+        <strong>Support mode</strong>
+        <span>{category.supportPackage[0]}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Key Features"
+          title="Why this category matters in a display program"
+          intro="The right category choice improves more than electrical compatibility. It also affects validation speed, assembly efficiency, and long-term serviceability."
+        />
+      </div>
+      <div class="card-grid">
+        {category.features.map((item) => (
+          <article class="card">
+            <h3>{item}</h3>
+            <p>
+              This capability reduces integration risk and makes the display subsystem easier to
+              control across development and production.
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid">
+      <div class="card card-emphasis">
+        <p class="eyebrow">Technical Coverage</p>
+        <h2>Typical specification scope</h2>
+        <ul class="list-check">
+          {category.specifications.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="card">
+        <p class="eyebrow">Applications</p>
+        <h2>Where customers use this category</h2>
+        <ul class="list-check">
+          {category.applications.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Support Package"
+          title="What TriView adds beyond the board or accessory itself"
+          intro="OEM teams rarely succeed with hardware alone. These support layers turn a selected category into a workable program."
+        />
+      </div>
+      <div class="card-grid">
+        {category.supportPackage.map((item) => (
+          <article class="card">
+            <h3>{item}</h3>
+            <p>
+              This support reduces the distance between sample evaluation and a controlled release
+              suitable for procurement and manufacturing.
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {relatedResources.length > 0 && (
+    <section class="section section-contrast">
+      <div class="container">
+        <SectionHeading
+          eyebrow="Resources"
+          title="Related integration notes and checklists"
+          intro="Use these guides to align stakeholders quickly: panel facts, interface constraints, firmware/OSD expectations, control I/O, cable planning, and production handoff."
+        />
+
+        <div class="card-grid">
+          {relatedResources.map((post) => (
+            <article class="card card-link">
+              <CardMedia label={post.data.title} />
+              <p class="eyebrow">Resource</p>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+              <a class="text-link" href={withLocale(locale, `/resources/${post.slug}`)}>
+                Read resource
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section-tight">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Related Categories"
+        title="Other TriView product categories often used alongside this one"
+        intro="Display programs are usually multi-component. These categories are commonly evaluated together."
+      />
+
+      <div class="card-grid">
+        {relatedCategories.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <a class="text-link" href={withLocale(locale, `/products/${item.slug}`)}>
+              View category
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Quoting"
+    title="Share your panel, signal, and volume target to qualify the right hardware stack."
+    body="TriView can help identify whether this category fits as-is or should be combined with firmware, touch, or cable customization for a cleaner deployment."
+    primaryLabel="Contact TriView"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="Back to products"
+    secondaryHref={withLocale(locale, "/products")}
+  />
+</MainLayout>

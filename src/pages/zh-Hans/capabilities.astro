@@ -1,0 +1,145 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { productCategories, siteConfig, solutions } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const capabilityBlocks = [
+  {
+    title: "显示控制板选型",
+    summary:
+      "将控制板选择与面板行为、接口约束（eDP/LVDS/V-by-One）、主机输出（HDMI/DP/USB-C）、产品生命周期与供货连续性一起评估，而不是把控制板当作孤立的 SKU。",
+    points: [
+      "面板匹配与接口评审（LVDS/eDP/V-by-One）",
+      "主机信号规划（HDMI/DP/USB-C 及混合环境）",
+      "在重构风险扩大前收敛架构",
+      "更适合 OEM 与替换项目"
+    ]
+  },
+  {
+    title: "触控与 HMI 协调",
+    summary:
+      "把触控作为显示子系统的一部分规划，让 UI 行为、结构假设与控制板决策在验证过程中保持一致，减少后期补救成本。",
+    points: ["触控与显示兼容性规划", "面向操作者的稳定性与体验考量", "降低后期集成摩擦"]
+  },
+  {
+    title: "线缆线束与配件整合",
+    summary:
+      "面向真实部署路径规划线束与配件，使走线、维护空间与结构限制在试产前就被纳入验证范围。",
+    points: ["考虑结构与维护可达性", "更顺畅的试产与装配落地", "降低现场安装与维护意外"]
+  },
+  {
+    title: "固件、OSD 与远程控制",
+    summary:
+      "很多项目需要的不只是“板卡能输出”，还需要可控的行为：OSD 默认值、启动逻辑，以及符合系统架构的控制方式。",
+    points: [
+      "OSD 默认值、品牌化、语言与锁定设置（按需）",
+      "UART/RS232/RS485 等控制 I/O（按项目）",
+      "EDID 行为、启动时序与现场服务设置对齐"
+    ]
+  },
+  {
+    title: "替换与迁移支持",
+    summary:
+      "当原有显示路径老化、难以采购或不再符合部署现实，宇睿可协助客户延续长生命周期产品，降低不必要的大改版压力。",
+    points: ["替换路径评审", "安装基数与连续性思维", "降低被迫整机重构的风险"]
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "宇睿电子能力与服务",
+  url: `${siteConfig.siteUrl}/zh-Hans/capabilities`,
+  description: "能力概览：控制板选型、触控整合、线束规划、固件/OSD 与替换迁移支持。"
+};
+---
+
+<MainLayout
+  title="能力与服务"
+  description="了解宇睿电子在控制板选型、触控整合、线束规划、固件/OSD 与替换迁移方面的能力与服务范围。"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="能力与服务"
+    title="能力页面说明宇睿如何在供货之外真正支持项目"
+    intro="B2B 买方往往需要了解的不只是“有哪些产品”，而是供应商在工程与集成层面到底能提供什么样的支持。"
+    highlight="本页把产品与解决方案翻译成更便于评估的能力叙事，帮助 OEM 与工业团队更快判断匹配度。"
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "沟通需求" },
+      { href: withLocale(locale, "/solutions"), label: "查看解决方案", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "首页", href: withLocale(locale, "/") },
+          { label: "能力与服务" }
+        ]}
+      />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>关联内容</strong>
+        <span>{productCategories.length} 个产品类别 · {solutions.length} 条方案路径</span>
+      </div>
+      <div>
+        <strong>适用对象</strong>
+        <span>OEM 买方、工业团队、替换项目、显示子系统整合</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {capabilityBlocks.map((item) => (
+        <article class="card">
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check compact-list">
+            {item.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="能力页的作用"
+          title="为仍在梳理项目边界的团队降低模糊空间"
+          intro="在探索阶段，很多访客并不确定自己需要控制板、替换路径还是更完整的子系统配套。能力导向的页面能更快帮助团队给问题分类。"
+        />
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="为什么重要"
+          title="更清晰的能力叙事会提升 SEO 与对话质量"
+          intro="它既能覆盖更高层的搜索意图，也能帮助更匹配的买方更快自筛进入有效沟通。"
+        />
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="项目范围"
+    title="需要把显示问题翻译成可执行的能力路径？"
+    body="如果你愿意分享面板型号、接口、结构限制，以及项目是替换还是新开发，宇睿可以协助把讨论快速路由到最相关的能力集合。"
+    primaryLabel="联系宇睿"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="查看应用场景"
+    secondaryHref={withLocale(locale, "/applications")}
+  />
+</MainLayout>
+

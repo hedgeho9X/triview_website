@@ -1,0 +1,20 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout title="Page Not Found" noindex={true}>
+  <section class="section">
+    <div class="container narrow-center">
+      <p class="eyebrow">404</p>
+      <h1>Page not found</h1>
+      <p class="hero-lead">
+        The requested page could not be located. Use the main navigation or return to the homepage
+        to continue exploring TriView Electronics.
+      </p>
+      <div class="button-row center-row">
+        <a class="button button-primary" href="/">Go to homepage</a>
+        <a class="button button-secondary" href="/contact">Contact TriView</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

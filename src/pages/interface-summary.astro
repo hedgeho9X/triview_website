@@ -1,0 +1,228 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { siteConfig } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "TriView Electronics Interface Summary",
+  url: `${siteConfig.siteUrl}/interface-summary`,
+  description:
+    "Quick summary of TriView Electronics interface coverage, controller-board scope, OSD customization, and control options for industrial display integration."
+};
+
+const panelInterfaces = [
+  {
+    title: "LVDS",
+    description:
+      "Common in industrial LCD modules. TriView scopes controller selection and harness routing to match the real panel timing and connector path."
+  },
+  {
+    title: "eDP",
+    description:
+      "Used in many modern panels, especially thinner modules. Projects often benefit from early signal-path review to avoid late rework."
+  },
+  {
+    title: "V-by-One",
+    description:
+      "Higher bandwidth panel interface used in larger or higher-resolution displays. Scope often includes cable and signal-integrity planning."
+  }
+];
+
+const hostInputs = [
+  {
+    title: "HDMI",
+    description: "Common OEM input path for embedded PCs and media sources."
+  },
+  {
+    title: "DisplayPort",
+    description: "Often used in higher-resolution or industrial computing platforms."
+  },
+  {
+    title: "DVI / VGA",
+    description:
+      "Legacy interfaces still appear in long-life equipment, retrofit projects, and installed-base migration work."
+  },
+  {
+    title: "USB-C",
+    description:
+      "Project-dependent. Useful when modern host platforms require a simplified connection strategy or consolidated I/O."
+  }
+];
+
+const controlCustomization = [
+  {
+    title: "OSD customization",
+    points: [
+      "Default settings aligned to the deployed environment",
+      "Logo/branding and language as required",
+      "Lock modes and service settings to reduce field misconfiguration"
+    ]
+  },
+  {
+    title: "Serial / remote control",
+    points: [
+      "UART / RS232 / RS485 integration when required",
+      "OSD behavior aligned with external control expectations",
+      "Useful for industrial HMIs and equipment with remote service workflows"
+    ]
+  },
+  {
+    title: "Panel matching discipline",
+    points: [
+      "Controller behavior aligned to the actual LCD module",
+      "Avoids unstable image behavior that appears only after deployment",
+      "Supports both new design-in and replacement programs"
+    ]
+  }
+];
+
+const validationSteps = [
+  {
+    title: "Requirement capture",
+    description:
+      "Panel model, host signal, resolution, environment, mechanical constraints, and lifecycle expectations."
+  },
+  {
+    title: "Scope the signal path",
+    description:
+      "Confirm host inputs and panel outputs (LVDS/eDP/V-by-One), cable routing, and connector access."
+  },
+  {
+    title: "Firmware & OSD alignment",
+    description:
+      "Lock down behavior, defaults, service access, and control options before pilot build."
+  },
+  {
+    title: "Pilot validation",
+    description:
+      "Confirm stability across image behavior, touch coordination, harness fit, and enclosure realities."
+  }
+];
+---
+
+<MainLayout
+  title="Interface Summary"
+  description="Quick summary of TriView interface coverage (LVDS/eDP/V-by-One), host inputs (HDMI/DP/DVI/VGA/USB-C), and OSD/control options."
+  path="/interface-summary"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Engineering Summary"
+    title="Interface and control coverage in one page"
+    intro="Industrial display programs fail when interface assumptions are wrong or when controller behavior drifts between prototype and production. This page helps OEM teams confirm coverage quickly."
+    highlight="Send the panel model and target host interface to get a scoped recommendation path (controller + firmware + harness)."
+    actions={[
+      { href: "/contact", label: "Send an inquiry" },
+      { href: "/products", label: "Browse products", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[{ label: "Home", href: "/" }, { label: "Interface Summary" }]}
+      />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Panel-side</strong>
+        <span>LVDS · eDP · V-by-One</span>
+      </div>
+      <div>
+        <strong>Host-side</strong>
+        <span>HDMI · DP · DVI · VGA · USB-C</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Panel Interfaces"
+        title="Panel-side interface families TriView commonly supports"
+        intro="Final feasibility depends on the panel model and project constraints. TriView’s value is in matching controller behavior and integration details to the real module."
+      />
+      <div class="card-grid">
+        {panelInterfaces.map((item) => (
+          <article class="card">
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Host Inputs"
+        title="Host-side input coverage for mixed-generation systems"
+        intro="Many OEM programs combine modern and legacy interfaces. Early review helps avoid late-stage conversion surprises."
+      />
+      <div class="card-grid">
+        {hostInputs.map((item) => (
+          <article class="card">
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Control & Customization"
+        title="OSD, serial control, and behavior alignment"
+        intro="The project outcome often depends on control behavior and service discipline as much as on raw signal conversion."
+      />
+      <div class="triple-grid">
+        {controlCustomization.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <ul class="list-check compact-list">
+              {item.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Validation"
+        title="A lightweight validation rhythm that protects long-life programs"
+        intro="This mirrors how TriView scopes work: capture constraints, align interfaces, lock firmware behavior, and validate pilot builds before scale."
+      />
+      <div class="timeline-grid">
+        {validationSteps.map((step, index) => (
+          <article class="timeline-card">
+            <span class="timeline-index">Step {String(index + 1).padStart(2, "0")}</span>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next step"
+    title="Want a fast answer? Share the panel model and host interface."
+    body="A short inquiry including panel model, host signal, resolution, touch requirement, and mechanical constraints is usually enough to confirm the right controller and integration path."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View solution tracks"
+    secondaryHref="/solutions"
+  />
+</MainLayout>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.triviewelectronics.com/sitemap-index.xml

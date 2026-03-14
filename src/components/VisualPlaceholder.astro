@@ -1,0 +1,152 @@
+---
+import crypto from "node:crypto";
+
+interface Props {
+  label: string;
+  subtitle?: string;
+  variant?: "signal" | "board" | "grid";
+  decorative?: boolean;
+}
+
+const { label, subtitle, variant = "signal", decorative = true } = Astro.props;
+const uid = crypto
+  .createHash("sha1")
+  .update(`${variant}:${label}:${subtitle ?? ""}`)
+  .digest("hex")
+  .slice(0, 10);
+
+const titleId = `vp-title-${uid}`;
+const descId = `vp-desc-${uid}`;
+---
+
+<figure class={`visual visual-${variant}`}>
+  <svg
+    viewBox="0 0 880 560"
+    width="880"
+    height="560"
+    role={decorative ? "presentation" : "img"}
+    aria-hidden={decorative ? "true" : undefined}
+    aria-labelledby={!decorative ? `${titleId} ${descId}` : undefined}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {!decorative && <title id={titleId}>{label}</title>}
+    {!decorative && <desc id={descId}>{subtitle ?? "Decorative placeholder visual."}</desc>}
+
+    <defs>
+      <linearGradient id={`bg-${uid}`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="rgba(255,255,255,0.10)" />
+        <stop offset="0.55" stop-color="rgba(255,255,255,0.06)" />
+        <stop offset="1" stop-color="rgba(0,0,0,0.12)" />
+      </linearGradient>
+
+      <radialGradient id={`glow-copper-${uid}`} cx="30%" cy="20%" r="72%">
+        <stop offset="0" stop-color="rgba(194,111,74,0.38)" />
+        <stop offset="0.55" stop-color="rgba(194,111,74,0.12)" />
+        <stop offset="1" stop-color="rgba(194,111,74,0)" />
+      </radialGradient>
+
+      <radialGradient id={`glow-teal-${uid}`} cx="78%" cy="12%" r="74%">
+        <stop offset="0" stop-color="rgba(46,139,139,0.30)" />
+        <stop offset="0.55" stop-color="rgba(46,139,139,0.10)" />
+        <stop offset="1" stop-color="rgba(46,139,139,0)" />
+      </radialGradient>
+
+      <pattern id={`grid-${uid}`} width="44" height="44" patternUnits="userSpaceOnUse">
+        <path
+          d="M 44 0 H 0 V 44"
+          fill="none"
+          stroke="rgba(255,255,255,0.08)"
+          stroke-width="1"
+        />
+        <circle cx="0" cy="0" r="1.3" fill="rgba(255,255,255,0.14)" />
+      </pattern>
+
+      <filter id={`soft-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="10" />
+      </filter>
+    </defs>
+
+    <rect x="18" y="18" width="844" height="524" rx="36" fill={`url(#bg-${uid})`} />
+    <rect x="18" y="18" width="844" height="524" rx="36" fill={`url(#grid-${uid})`} opacity="0.85" />
+
+    <g opacity="0.95">
+      <circle cx="230" cy="140" r="190" fill={`url(#glow-copper-${uid})`} />
+      <circle cx="662" cy="92" r="220" fill={`url(#glow-teal-${uid})`} />
+    </g>
+
+    {variant !== "grid" && (
+      <g
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.95"
+      >
+        <path
+          d="M 132 260 C 250 260 250 148 368 148 C 486 148 486 318 604 318 C 722 318 722 206 820 206"
+          stroke="rgba(255,255,255,0.42)"
+          stroke-width="2.5"
+        />
+        <path
+          d="M 120 356 C 230 356 248 438 360 438 C 472 438 490 356 602 356 C 714 356 736 412 820 412"
+          stroke="rgba(194,111,74,0.52)"
+          stroke-width="2"
+        />
+        <path
+          d="M 188 196 L 254 196 L 254 232"
+          stroke="rgba(46,139,139,0.62)"
+          stroke-width="2"
+        />
+        <path
+          d="M 672 256 L 720 256 L 720 224"
+          stroke="rgba(255,255,255,0.35)"
+          stroke-width="2"
+        />
+      </g>
+    )}
+
+    <g opacity="0.95">
+      {[
+        [132, 260],
+        [368, 148],
+        [604, 318],
+        [820, 206],
+        [120, 356],
+        [360, 438],
+        [602, 356],
+        [820, 412]
+      ].map(([x, y]) => (
+        <g>
+          <circle cx={x} cy={y} r="9" fill="rgba(255,255,255,0.18)" />
+          <circle cx={x} cy={y} r="4.2" fill="rgba(255,255,255,0.62)" />
+        </g>
+      ))}
+    </g>
+
+    <g filter={`url(#soft-${uid})`} opacity="0.18">
+      <path
+        d="M 110 120 C 220 80 340 120 460 100 C 600 74 720 86 820 120"
+        stroke="rgba(255,255,255,0.65)"
+        stroke-width="10"
+        fill="none"
+      />
+    </g>
+
+    <g font-family="IBM Plex Mono, ui-monospace, monospace">
+      <text x="72" y="462" fill="rgba(255,255,255,0.86)" font-size="15" letter-spacing="0.18em">
+        {label.toUpperCase()}
+      </text>
+      {subtitle && (
+        <text x="72" y="492" fill="rgba(255,255,255,0.68)" font-size="14">
+          {subtitle}
+        </text>
+      )}
+      <text x="72" y="520" fill="rgba(255,255,255,0.48)" font-size="12">
+        {variant === "board"
+          ? "REFERENCE BOARD LAYOUT (PLACEHOLDER)"
+          : variant === "grid"
+            ? "PATTERN BACKDROP (PLACEHOLDER)"
+            : "SIGNAL FLOW (PLACEHOLDER)"}
+      </text>
+    </g>
+  </svg>
+</figure>

@@ -1,0 +1,159 @@
+---
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { siteConfig } from "../data/site";
+import { type Locale, defaultLocale, locales } from "../i18n/locales";
+import {
+  getLocaleFromUrl,
+  localizedBasePaths,
+  stripLocaleFromUrl,
+  withLocale
+} from "../i18n/routing";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** @deprecated Canonical is derived from `Astro.url.pathname`. */
+  path?: string;
+  image?: string;
+  type?: "website" | "article";
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = siteConfig.defaultDescription,
+  path: _path,
+  image = "/og-default.svg",
+  type = "website",
+  structuredData,
+  noindex = false
+} = Astro.props;
+
+const pathname = Astro.url.pathname;
+const locale = getLocaleFromUrl(pathname);
+const basePath = stripLocaleFromUrl(pathname);
+
+const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.defaultTitle;
+const canonicalUrl = new URL(pathname, siteConfig.siteUrl).toString();
+const imageUrl = new URL(image, siteConfig.siteUrl).toString();
+
+const ogLocales: Record<Locale, string> = {
+  en: "en_US",
+  "zh-Hans": "zh_CN",
+  "zh-Hant": "zh_TW"
+};
+
+const shouldRenderAlternates =
+  localizedBasePaths.has(basePath) ||
+  basePath.startsWith("/products/") ||
+  basePath.startsWith("/solutions/") ||
+  basePath.startsWith("/resources/");
+
+const alternateLinks = shouldRenderAlternates
+  ? locales.map((loc) => ({
+      locale: loc,
+      href: new URL(withLocale(loc, basePath), siteConfig.siteUrl).toString()
+    }))
+  : [];
+
+const xDefaultHref = alternateLinks.find((link) => link.locale === defaultLocale)?.href;
+
+const webSiteData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.siteUrl
+};
+
+const organizationData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.legalName,
+  alternateName: siteConfig.localName,
+  url: siteConfig.siteUrl,
+  logo: new URL("/og-default.svg", siteConfig.siteUrl).toString(),
+  email: siteConfig.contactEmail,
+  telephone: siteConfig.contactPhone,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Tainan City",
+    addressRegion: "Tainan",
+    addressCountry: "TW"
+  },
+  areaServed: ["Taiwan", "North America", "Europe", "Asia-Pacific"]
+};
+
+const pageStructured = Array.isArray(structuredData)
+  ? structuredData
+  : structuredData
+    ? [structuredData]
+    : [];
+
+const combinedStructuredData = [webSiteData, organizationData, ...pageStructured];
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={siteConfig.legalName} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#10263b" />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@500;600&display=swap"
+    />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={title ?? siteConfig.defaultTitle} />
+    <meta property="og:locale" content={ogLocales[locale]} />
+    {locales
+      .filter((loc) => loc !== locale)
+      .map((loc) => (
+        <meta property="og:locale:alternate" content={ogLocales[loc]} />
+      ))}
+
+    {alternateLinks.length > 0 && xDefaultHref && (
+      <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+    )}
+    {alternateLinks.map((alt) => (
+      <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+    ))}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    {combinedStructuredData.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

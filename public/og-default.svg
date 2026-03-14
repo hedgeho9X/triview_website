@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="TriView Electronics social image">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#08101c" />
+      <stop offset="100%" stop-color="#13243a" />
+    </linearGradient>
+    <radialGradient id="glowCopper" cx="22%" cy="18%" r="72%">
+      <stop offset="0%" stop-color="#c26f4a" stop-opacity="0.55" />
+      <stop offset="60%" stop-color="#c26f4a" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#c26f4a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowTeal" cx="82%" cy="12%" r="74%">
+      <stop offset="0%" stop-color="#2e8b8b" stop-opacity="0.42" />
+      <stop offset="60%" stop-color="#2e8b8b" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#2e8b8b" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M 72 0 H 0 V 72" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <circle cx="0" cy="0" r="1.6" fill="rgba(255,255,255,0.14)" />
+    </pattern>
+    <linearGradient id="mark" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#c26f4a" />
+      <stop offset="100%" stop-color="#0b1320" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.75" />
+  <circle cx="260" cy="160" r="260" fill="url(#glowCopper)" />
+  <circle cx="960" cy="120" r="320" fill="url(#glowTeal)" />
+
+  <rect x="72" y="72" width="124" height="124" rx="32" fill="url(#mark)" />
+  <path d="M102 110h64v12h-26v42h-12v-42h-26z" fill="rgba(255,255,255,0.92)" />
+
+  <text x="72" y="278" fill="rgba(255,255,255,0.92)" font-family="IBM Plex Serif, Noto Serif TC, serif" font-size="66" font-weight="600">
+    TriView Electronics
+  </text>
+  <text x="72" y="344" fill="rgba(255,255,255,0.72)" font-family="IBM Plex Sans, Noto Sans TC, sans-serif" font-size="34" font-weight="500">
+    LCD controller boards, scaler kits, touch integration, and harness-ready delivery
+  </text>
+  <text x="72" y="416" fill="rgba(255,255,255,0.68)" font-family="IBM Plex Sans, Noto Sans TC, sans-serif" font-size="28">
+    宇睿电子 | Taiwan-based ODM/OEM partner for industrial display subsystems
+  </text>
+</svg>

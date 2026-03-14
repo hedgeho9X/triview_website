@@ -1,0 +1,329 @@
+---
+import CallToAction from "../../components/CallToAction.astro";
+import CardMedia from "../../components/CardMedia.astro";
+import FaqList from "../../components/FaqList.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import StatGrid from "../../components/StatGrid.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { industries, productCategories, siteConfig, solutions } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const stats = [
+  { value: "ODM/OEM", label: "合作模式" },
+  { value: "LCD + Touch", label: "子系统范围" },
+  { value: "台南, 台湾", label: "工程协同基地" },
+  { value: "B2B", label: "面向 OEM 与工业客户" }
+];
+
+const trustPoints = [
+  {
+    title: "台南团队的工程协同",
+    description: "在控制板选型、固件行为、线束路径与小批试产之间快速对齐，减少跨团队信息偏差。"
+  },
+  {
+    title: "匹配 ODM/OEM 流程",
+    description: "适合需要版本控制、验证步骤清晰、并能稳定导入量产的 OEM 项目与替换项目。"
+  },
+  {
+    title: "可集成的配套与线束",
+    description: "触控协调与定制线缆线束降低装配与维护风险，让系统更接近可交付状态。"
+  },
+  {
+    title: "面向替换项目的纪律",
+    description: "针对长生命周期设备，优先保证接口连续性与供货稳定性，而不是追逐不必要的改版。"
+  }
+];
+
+const workflowSteps = [
+  {
+    title: "明确项目约束",
+    description: "在选型前对齐面板、输入信号、触控需求、结构限制与寿命预期，避免后续返工。"
+  },
+  {
+    title: "对齐控制板与配套路径",
+    description: "把控制板、线束、触控与安装假设一起确认，确保设计不仅能点亮样机，也能走向量产。"
+  },
+  {
+    title: "面向部署的验证与放行",
+    description: "验证图像行为、信号稳定性、连接器与走线可维护性，并在试产前完成可控放行。"
+  }
+];
+
+const homeFaqs = [
+  {
+    question: "宇睿电子主要提供哪些服务？",
+    answer:
+      "宇睿电子（TriView Electronics）专注于 LCD 控制板与 AD 板的 ODM/OEM 项目，并提供面板匹配、OSD 定制、RS232/RS485 控制选项、触控整合与线缆线束配套等工程支持。"
+  },
+  {
+    question: "网站内容适合哪些采购与工程团队？",
+    answer:
+      "适合正在评估控制板或显示子系统合作伙伴的 OEM 与工业客户团队，尤其是需要生命周期延续、替换导入或触控 HMI 整合的项目。"
+  },
+  {
+    question: "宇睿更擅长定制还是替换项目？",
+    answer:
+      "两者都可以。对于新开发项目，重点在于信号路径、固件行为与线束方案的前置对齐；对于替换项目，则强调接口连续性、验证纪律与供货稳定性。"
+  },
+  {
+    question: "如何让首次询价更高效？",
+    answer:
+      "建议在首次沟通中提供面板型号、主机接口、触控需求、结构限制、预估量与目标时程。这些信息通常足以快速缩小可行路径。"
+  }
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "宇睿电子 | 台湾 LCD 控制板 ODM/OEM 合作伙伴",
+    url: `${siteConfig.siteUrl}/zh-Hans`,
+    description:
+      "宇睿电子（TriView Electronics）位于台湾台南，面向 OEM 与工业客户提供 LCD 控制板、AD 板、触控显示子系统与线缆线束配套支持，覆盖 eDP/LVDS/V-by-One/USB-C 等接口与 RS232/RS485 控制、OSD 定制等需求。"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: homeFaqs.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  }
+];
+---
+
+<MainLayout
+  title="首页"
+  description="宇睿电子（TriView Electronics）位于台湾台南，面向 OEM 与工业客户提供 LCD 控制板、AD 板、触控显示子系统与线缆线束配套支持，覆盖 eDP/LVDS/V-by-One/USB-C 等接口与 RS232/RS485 控制、OSD 定制等需求。"
+  structuredData={structuredData}
+>
+  <section class="section hero-shell">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">台湾 LCD 控制板 ODM/OEM</p>
+        <h1>为 OEM 团队提供稳定的显示控制工程，避免集成偏移拖慢进度。</h1>
+        <p class="hero-lead">
+          TriView Electronics（宇睿电子）位于台湾台南，面向工业、医疗、自助终端与嵌入式项目，提供 LCD 控制板、AD 板、触控就绪的显示子系统与线缆整合支持。
+          <span class="sr-only">关键接口与控制覆盖如下。</span>
+        </p>
+
+        <div class="button-row">
+          <a class="button button-primary" href={withLocale(locale, "/contact")}>发起询价</a>
+          <a class="button button-secondary" href={withLocale(locale, "/solutions")}>查看解决方案</a>
+        </div>
+
+        <div class="signal-row" aria-label="关键接口与控制覆盖">
+          <span class="pill">HDMI</span>
+          <span class="pill">DisplayPort</span>
+          <span class="pill">DVI</span>
+          <span class="pill">VGA</span>
+          <span class="pill">LVDS</span>
+          <span class="pill">eDP</span>
+          <span class="pill">V-by-One</span>
+          <span class="pill">USB-C</span>
+          <span class="pill">RS232/RS485</span>
+          <span class="pill">OSD 定制</span>
+          <span class="pill">面板匹配</span>
+        </div>
+      </div>
+
+      <div class="hero-panel hero-panel-large">
+        <VisualPlaceholder
+          variant="signal"
+          label="信号到面板的适配"
+          subtitle="控制板选型 · 固件调校 · 线束走线"
+          decorative={true}
+        />
+
+        <p class="eyebrow">为什么选择 TriView</p>
+        <h2>一个合作伙伴覆盖选型、固件行为、线束适配与试产执行。</h2>
+        <p class="hero-panel-copy">
+          当项目涉及旧接口、机内空间受限或长期供货要求时，通用现成板往往带来额外验证成本。宇睿的价值在于把这些“易被忽略的集成细节”前置处理，降低返工与进度漂移。
+        </p>
+
+        <div class="hero-checks">
+          <div class="check-item">
+            <strong>面板匹配，而不是猜测</strong>
+            <span>把控制时序与行为对齐到实际 LCD 模组，而不是只参考通用资料。</span>
+          </div>
+          <div class="check-item">
+            <strong>更接近可量产的线束配套</strong>
+            <span>更干净的装配路径，更快 bring-up，减少因线束不匹配导致的现场问题。</span>
+          </div>
+          <div class="check-item">
+            <strong>ODM/OEM 的项目控制</strong>
+            <span>结构化验证、OSD 默认值与控制行为（需要时支持 RS232/RS485），满足长期工业项目的可控交付。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tight">
+    <div class="container">
+      <StatGrid items={stats} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="产品类别"
+        title="面向 OEM 集成流程的控制板与配套硬件"
+        intro="宇睿覆盖决定项目从样品验证到量产稳定的板级与配件层，让团队更快收敛可行方案。"
+      />
+
+      <div class="card-grid">
+        {productCategories.map((item) => (
+          <article class="card card-link">
+            <CardMedia label={item.title} />
+            <p class="eyebrow">{item.kicker}</p>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <ul class="list-check">
+              {item.features.slice(0, 3).map((feature) => (
+                <li>{feature}</li>
+              ))}
+            </ul>
+            <a class="text-link" href={withLocale(locale, `/products/${item.slug}`)}>
+              查看产品类别
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="解决方案"
+        title="面向定制开发、生命周期延续与工业显示整合的合作模式"
+        intro="成功的显示项目通常先对齐技术范围与交付边界。这些方案路径帮助 OEM 团队更快找到合适的合作方式。"
+      />
+
+      <div class="card-grid">
+        {solutions.map((item) => (
+          <article class="card">
+            <CardMedia label={item.title} />
+            <p class="eyebrow">{item.kicker}</p>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <a class="text-link" href={withLocale(locale, `/solutions/${item.slug}`)}>
+              阅读方案介绍
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="为什么 OEM 团队选择宇睿"
+          title="以工程纪律保护交付节奏、集成质量与供货连续性"
+          intro="B2B 显示项目的主要风险往往不只是控制板本身，而是控制板行为、固件适配、线束走线、结构限制与响应速度的组合效应。"
+        />
+      </div>
+
+      <div class="stack-grid">
+        {trustPoints.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="项目流程"
+        title="从需求收敛到可量产的显示控制路径"
+        intro="面向工业时程，验证与版本清晰度与技术可行性同等重要。"
+      />
+
+      <div class="timeline-grid">
+        {workflowSteps.map((item, index) => (
+          <article class="timeline-card">
+            <span class="timeline-index">步骤 {String(index + 1).padStart(2, "0")}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tight">
+    <div class="container">
+      <SectionHeading
+        eyebrow="行业"
+        title="覆盖长生命周期与高可靠要求的显示整合场景"
+        intro="当产品生命周期更长、显示更关键时，控制板与整合支持的选择会显著影响验证成本与交付风险。"
+      />
+
+      <div class="chip-cloud">
+        {industries.map((item) => (
+          <span class="chip">{item}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container triple-grid">
+      <article class="card">
+        <p class="eyebrow">能力与服务</p>
+        <h3>更快判断供应商匹配度</h3>
+        <p>了解宇睿如何支持选型、触控协调、线束规划与替换导入，不止是供货。</p>
+        <a class="text-link" href={withLocale(locale, "/capabilities")}>查看能力与服务</a>
+      </article>
+      <article class="card">
+        <p class="eyebrow">应用场景</p>
+        <h3>按项目情境进入更高效</h3>
+        <p>从替换、新设计导入或触控 HMI 整合切入，快速定位下一步，而不是被产品分类卡住。</p>
+        <a class="text-link" href={withLocale(locale, "/applications")}>查看应用场景</a>
+      </article>
+      <article class="card card-emphasis">
+        <p class="eyebrow">接口概览</p>
+        <h3>快速确认接口覆盖</h3>
+        <p>一页核对面板侧（LVDS/eDP/V-by-One）、主机侧（HDMI/DP/DVI/VGA/USB-C），以及 OSD 与 RS232/RS485 控制范围。</p>
+        <a class="text-link" href={withLocale(locale, "/interface-summary")}>打开接口概览</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="常见问题"
+        title="关于宇睿电子的常见问题"
+        intro="这些回答覆盖 OEM 团队在探索阶段最常见的问题，便于内部共享与快速判断。"
+      />
+      <FaqList items={homeFaqs} />
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="下一步"
+    title="提供面板型号与目标接口，宇睿可快速确认控制路径。"
+    body="如果你已明确 LCD 模组、主机信号、触控需求与预估量，宇睿可给出可执行的 ODM/OEM 路径与样品验证计划。"
+    primaryLabel="联系宇睿"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="查看产品类别"
+    secondaryHref={withLocale(locale, "/products")}
+  />
+</MainLayout>
+

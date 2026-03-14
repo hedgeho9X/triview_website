@@ -1,0 +1,150 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { productCategories, siteConfig, solutions } from "../data/site";
+
+const capabilityBlocks = [
+  {
+    title: "Display controller selection",
+    summary:
+      "Match controller-board choices to panel behavior, interface constraints (eDP/LVDS/V-by-One), host outputs (HDMI/DP/USB-C), product lifecycle, and sourcing continuity instead of treating the board as an isolated SKU.",
+    points: [
+      "Panel matching and interface review (LVDS/eDP/V-by-One)",
+      "Host signal planning (HDMI/DP/USB-C and mixed environments)",
+      "Architecture narrowing before redesign risk grows",
+      "Better fit for OEM and replacement programs"
+    ]
+  },
+  {
+    title: "Touch and HMI coordination",
+    summary:
+      "Treat touch as part of the subsystem so that UI behavior, enclosure assumptions, and controller decisions stay aligned through validation.",
+    points: [
+      "Touch/display compatibility planning",
+      "Operator-facing stability considerations",
+      "Lower late-stage integration friction"
+    ]
+  },
+  {
+    title: "Cable and accessory integration",
+    summary:
+      "Support the real deployment path with harness and accessory planning that reflects routing, service access, and enclosure constraints.",
+    points: [
+      "Mechanical-fit awareness",
+      "Cleaner pilot-build execution",
+      "Lower field-installation surprises"
+    ]
+  },
+  {
+    title: "Firmware, OSD, and remote control",
+    summary:
+      "Many projects require behavior control beyond the board: OSD defaults, boot behavior, and a service-friendly control method that fits the system architecture.",
+    points: [
+      "OSD defaults, branding, language, and lock settings (as needed)",
+      "Control I/O options such as UART/RS232/RS485 (project-dependent)",
+      "EDID behavior, boot timing, and field-service settings alignment"
+    ]
+  },
+  {
+    title: "Legacy migration support",
+    summary:
+      "Help customers extend long-life products when the original display path is aging out, difficult to source, or no longer suitable for deployment realities.",
+    points: [
+      "Replacement-path review",
+      "Installed-base continuity thinking",
+      "Lower redesign pressure"
+    ]
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "TriView Electronics Capabilities",
+  url: `${siteConfig.siteUrl}/capabilities`,
+  description:
+    "Capabilities overview for controller selection, touch integration, cable planning, and legacy display migration support."
+};
+---
+
+<MainLayout
+  title="Capabilities"
+  description="Explore TriView Electronics capabilities across controller selection, touch integration, cable planning, and legacy display migration."
+  path="/capabilities"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Capabilities"
+    title="Capabilities explain how TriView supports a project beyond basic part supply"
+    intro="B2B buyers often need to understand not only what products exist, but what kind of engineering and integration support a supplier can actually provide."
+    highlight="This page translates products and solutions into a practical capability narrative that is easier for OEM and industrial buyers to evaluate."
+    actions={[
+      { href: "/contact", label: "Discuss your requirements" },
+      { href: "/solutions", label: "View solution tracks", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Capabilities" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Linked content</strong>
+        <span>{productCategories.length} product categories · {solutions.length} solution tracks</span>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <span>OEM buyers, industrial teams, replacement projects, subsystem integration work</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {capabilityBlocks.map((item) => (
+        <article class="card">
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check compact-list">
+            {item.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="What capability pages do"
+          title="They reduce ambiguity for buyers who are still framing the project"
+          intro="Early-stage visitors may not yet know whether they need a board, a replacement path, or a broader integration package. Capability-led pages help them classify the problem faster."
+        />
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="Why this matters"
+          title="A stronger capability narrative improves both SEO and conversion quality"
+          intro="It captures higher-level search intent while also helping more qualified buyers self-select into relevant conversations."
+        />
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Project Scope"
+    title="Need help translating a display problem into the right capability path?"
+    body="If you share your panel, interface, mechanical constraints, and whether the project is a replacement or new design, TriView can help route the discussion toward the most relevant capability set."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="See applications"
+    secondaryHref="/applications"
+  />
+</MainLayout>

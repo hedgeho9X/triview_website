@@ -1,0 +1,191 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig } from "../../data/site";
+
+export const useCases = [
+  {
+    slug: "aging-industrial-hmi-replacement",
+    title: "Replacing an aging industrial HMI display path",
+    context:
+      "A manufacturer needs to keep a long-life machine platform in service, but the original display path is becoming harder to source and support.",
+    needs: [
+      "Preserve installed-base continuity",
+      "Reduce redesign pressure",
+      "Validate a lower-risk controller and cable path"
+    ],
+    inquiryInputs: [
+      "Panel model and current interface (LVDS/eDP/V-by-One)",
+      "Host input path (HDMI/DP/DVI/VGA/USB-C)",
+      "Existing enclosure and cable routing constraints",
+      "Lifecycle expectations and installed-base service needs"
+    ],
+    route: [
+      { href: "/solutions/legacy-display-replacement", label: "Legacy Display Replacement" },
+      { href: "/industries/industrial-automation", label: "Industrial Automation" },
+      { href: "/applications/legacy-display-replacement", label: "Legacy display replacement (application)" },
+      { href: "/interface-summary", label: "Interface Summary" }
+    ]
+  },
+  {
+    slug: "oem-embedded-display-design-in",
+    title: "Designing a new OEM embedded display subsystem",
+    context:
+      "A product team is early in development and wants to align panel, controller, touch, and cable decisions before the architecture hardens.",
+    needs: [
+      "Avoid late integration rework",
+      "Improve prototype-to-production continuity",
+      "Clarify subsystem scope early"
+    ],
+    inquiryInputs: [
+      "Target panel model (or shortlist) and resolution",
+      "Host platform and signal outputs",
+      "Touch requirements and operator environment",
+      "Mechanical envelope and mounting assumptions"
+    ],
+    route: [
+      { href: "/solutions/custom-display-integration", label: "Custom Display Integration" },
+      { href: "/applications/new-oem-design-in", label: "New OEM design-in (application)" },
+      { href: "/capabilities", label: "Capabilities" },
+      { href: "/panel-brands", label: "Panel Brands" }
+    ]
+  },
+  {
+    slug: "touch-enabled-kiosk-rollout-stability",
+    title: "Stabilizing a touch-enabled kiosk or operator interface rollout",
+    context:
+      "A commercial deployment needs display and touch behavior to remain consistent across installation batches and field environments.",
+    needs: [
+      "Align touch and display behavior",
+      "Reduce field installation surprises",
+      "Support cleaner accessory planning"
+    ],
+    inquiryInputs: [
+      "Touch modality and expected UI behavior",
+      "Environmental constraints (gloves, vibration, temperature, brightness)",
+      "Cable/harness routing and service access requirements",
+      "Deployment volumes and rollout cadence"
+    ],
+    route: [
+      { href: "/solutions/touch-and-hmi-subsystems", label: "Touch & HMI Subsystems" },
+      { href: "/industries/kiosks-and-signage", label: "Kiosks & Signage" },
+      { href: "/applications/touch-enabled-hmi-integration", label: "Touch-enabled HMI integration (application)" },
+      { href: "/compliance", label: "Compliance" }
+    ]
+  }
+];
+
+export function getStaticPaths() {
+  return useCases.map((useCase) => ({
+    params: { slug: useCase.slug },
+    props: { useCase }
+  }));
+}
+
+const { useCase } = Astro.props as { useCase: (typeof useCases)[number] };
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: useCase.title,
+  url: `${siteConfig.siteUrl}/use-cases/${useCase.slug}`,
+  description: useCase.context
+};
+---
+
+<MainLayout
+  title={useCase.title}
+  description={useCase.context}
+  path={`/use-cases/${useCase.slug}`}
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Use Case"
+    title={useCase.title}
+    intro={useCase.context}
+    highlight="Use-case pages help buyers connect a project situation to the right combination of products, solutions, and engineering scope."
+    actions={[
+      { href: "/contact", label: "Discuss this use case" },
+      { href: "/use-cases", label: "Back to use cases", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[{ label: "Home", href: "/" }, { label: "Use Cases", href: "/use-cases" }, { label: useCase.title }]}
+      />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Typical needs</strong>
+        <span>{useCase.needs.slice(0, 2).join(" · ")}</span>
+      </div>
+      <div>
+        <strong>Best starting point</strong>
+        <span>{useCase.route[0].label}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="Project needs"
+          title="What this scenario usually requires"
+          intro="A use case is a shortcut to scope: it clarifies the integration risks and what must be controlled to keep a rollout stable."
+        />
+        <ul class="list-check compact-list">
+          {useCase.needs.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="Inquiry inputs"
+          title="What to share to get a faster technical answer"
+          intro="A well-scoped inquiry reduces back-and-forth and helps TriView respond with a traceable recommendation path."
+        />
+        <ul class="list-check compact-list">
+          {useCase.inquiryInputs.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Suggested navigation"
+        title="Pages that map to this use case"
+        intro="These links help buyers move from scenario to solution track, industry context, and interface/compatibility confirmation."
+      />
+
+      <div class="card-grid">
+        {useCase.route.map((item) => (
+          <article class="card card-link">
+            <h3>{item.label}</h3>
+            <a class="text-link" href={item.href}>{item.href}</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next step"
+    title="If this scenario matches your program, the fastest path is a short technical brief"
+    body="Send the panel model, host signal, deployment environment, and any mechanical constraints. TriView can then confirm interface fit, control/OSD scope, and a likely validation path."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="Interface summary"
+    secondaryHref="/interface-summary"
+  />
+</MainLayout>

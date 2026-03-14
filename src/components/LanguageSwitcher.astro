@@ -1,0 +1,48 @@
+---
+import { type Locale } from "../i18n/locales";
+import { getLocaleFromUrl, localizedBasePaths, stripLocaleFromUrl, withLocale } from "../i18n/routing";
+
+type SwitcherItem = {
+  locale: Locale;
+  label: string;
+  title: string;
+};
+
+const currentLocale = getLocaleFromUrl(Astro.url.pathname);
+const basePath = stripLocaleFromUrl(Astro.url.pathname);
+
+const switchBasePath = (() => {
+  if (basePath.startsWith("/industries/")) return "/industries";
+  if (basePath.startsWith("/applications/")) return "/applications";
+
+  if (localizedBasePaths.has(basePath)) return basePath;
+  // Products/solutions/resources detail routes are generated for all locales.
+  if (
+    basePath.startsWith("/products/") ||
+    basePath.startsWith("/solutions/") ||
+    basePath.startsWith("/resources/")
+  ) {
+    return basePath;
+  }
+  return "/";
+})();
+
+const items: SwitcherItem[] = [
+  { locale: "en", label: "EN", title: "English" },
+  { locale: "zh-Hans", label: "简", title: "简体中文" },
+  { locale: "zh-Hant", label: "繁", title: "繁體中文" }
+];
+---
+
+<nav class="lang-switcher" aria-label="Language switcher">
+  {items.map((item) => (
+    <a
+      class={item.locale === currentLocale ? "lang-link active" : "lang-link"}
+      href={withLocale(item.locale, switchBasePath)}
+      aria-current={item.locale === currentLocale ? "true" : undefined}
+      title={item.title}
+    >
+      {item.label}
+    </a>
+  ))}
+</nav>

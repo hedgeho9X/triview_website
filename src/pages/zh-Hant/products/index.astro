@@ -1,0 +1,130 @@
+---
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import CallToAction from "../../../components/CallToAction.astro";
+import CardMedia from "../../../components/CardMedia.astro";
+import PageHero from "../../../components/PageHero.astro";
+import SectionHeading from "../../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../../components/VisualPlaceholder.astro";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import { productCategories, productCoverage, siteConfig } from "../../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "宇睿電子產品類別",
+  url: `${siteConfig.siteUrl}/zh-Hant/products`,
+  description:
+    "宇睿電子產品類別包含 LCD 控制板、AD 板與 scaler 方案、觸控模組與客製線纜線束等，面向 eDP/LVDS/V-by-One/USB-C 等介面專案。",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: productCategories.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.siteUrl}/zh-Hant/products/${item.slug}`,
+      name: item.title
+    }))
+  }
+};
+---
+
+<MainLayout
+  title="產品"
+  description="瀏覽宇睿電子產品類別：LCD 控制板、AD 板與 scaler 方案、觸控模組與線纜線束配套。介面覆蓋包含 eDP/LVDS/V-by-One/USB-C，並可配套 RS232/RS485 控制與 OSD 客製。"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="產品類別"
+    title="面向工程落地的控制板與配套硬體"
+    intro="產品類別按「影響顯示 bring-up、可靠性與量產一致性」的關鍵層來組織，便於工程團隊快速定位正確的硬體族群。"
+    highlight="與其把零散部件分開呈現，宇睿更強調控制板、AD 板、觸控與線束如何組合成可交付的顯示子系統。"
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "取得報價 / 詢價" },
+      { href: withLocale(locale, "/solutions"), label: "查看解決方案", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "首頁", href: withLocale(locale, "/") },
+          { label: "產品" }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="board"
+      label="產品家族"
+      subtitle="控制板 · scaler · 觸控 · 線束"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>適用場景</strong>
+        <span>工業、醫療、商顯、自助終端、嵌入式、長期替換</span>
+      </div>
+      <div>
+        <strong>專案模式</strong>
+        <span>標準選型或 ODM/OEM 客製配套</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {productCategories.map((item) => (
+        <article class="card card-link">
+          <CardMedia label={item.title} />
+          <p class="eyebrow">{item.kicker}</p>
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check">
+            {item.features.slice(0, 3).map((feature) => (
+              <li>{feature}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={withLocale(locale, `/products/${item.slug}`)}>
+            打開類別頁面
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="覆蓋範圍"
+        title="訊號、介面與配套支援的常見組合"
+        intro="這個概覽用於快速對齊典型的技術工作包，方便在內部評審或首次詢價時形成共同語言。"
+      />
+
+      <div class="card-grid">
+        {productCoverage.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <ul class="list-check">
+              {item.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="類別選型"
+    title="如果你已明確面板與主機介面，宇睿可快速收斂到正確類別。"
+    body="很多專案卡在「到底需要控制板、scaler、觸控子系統還是線束配套」。一次簡短的需求核對通常就能顯著減少試錯與返工。"
+    primaryLabel="發起詢價"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="查看解決方案"
+    secondaryHref={withLocale(locale, "/solutions")}
+  />
+</MainLayout>
+

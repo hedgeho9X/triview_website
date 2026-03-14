@@ -1,0 +1,122 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import CardMedia from "../../components/CardMedia.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { productCategories, productCoverage, siteConfig } from "../../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "TriView Electronics Product Categories",
+  url: `${siteConfig.siteUrl}/products`,
+  description:
+    "Product categories from TriView Electronics including LCD controller boards, AD boards, touch modules, and cable accessories for eDP/LVDS/V-by-One/USB-C display programs.",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: productCategories.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.siteUrl}/products/${item.slug}`,
+      name: item.title
+    }))
+  }
+};
+---
+
+<MainLayout
+  title="Products"
+  description="Explore TriView Electronics product categories for LCD controller boards, AD boards, touch modules, and cable integration, with interface coverage including eDP/LVDS/V-by-One/USB-C and control options like RS232/RS485 and OSD customization."
+  path="/products"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Product Categories"
+    title="Board-level and accessory-level display hardware for OEM integration"
+    intro="TriView’s product categories are organized around the components that most directly affect display bring-up, reliability, and production repeatability."
+    highlight="Instead of presenting isolated parts, the catalog is structured to show how controller boards, AD boards, touch modules, and cable kits work together."
+    actions={[
+      { href: "/contact", label: "Request a quote" },
+      { href: "/solutions", label: "See solution models", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products" }]} />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="board"
+      label="Product Families"
+      subtitle="Controller boards · scaler kits · touch · harnesses"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Use case range</strong>
+        <span>Industrial, medical, commercial, embedded, long-life replacement</span>
+      </div>
+      <div>
+        <strong>Program mode</strong>
+        <span>Standard category selection or custom ODM/OEM tailoring</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {productCategories.map((item) => (
+        <article class="card card-link">
+          <CardMedia label={item.title} />
+          <p class="eyebrow">{item.kicker}</p>
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check">
+            {item.features.slice(0, 3).map((feature) => (
+              <li>{feature}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={`/products/${item.slug}`}>
+            Open category page
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Coverage"
+        title="Signal, interface, and support coverage that OEM teams typically need"
+        intro="This overview shows the major capability layers customers usually combine in one project."
+      />
+
+      <div class="card-grid">
+        {productCoverage.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <ul class="list-check">
+              {item.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Category Selection"
+    title="If you know the panel and host interface, TriView can narrow the right category quickly."
+    body="Many projects start with uncertainty about whether they need a controller board, scaler kit, touch subsystem, or a complete accessory package. A short requirement review can reduce trial-and-error."
+    primaryLabel="Start an inquiry"
+    primaryHref="/contact"
+    secondaryLabel="Review solutions"
+    secondaryHref="/solutions"
+  />
+</MainLayout>

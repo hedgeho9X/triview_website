@@ -1,0 +1,148 @@
+---
+import { siteConfig } from "../data/site";
+import { getLocaleFromUrl } from "../i18n/routing";
+import { t } from "../i18n/ui";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+---
+
+<div class="card inquiry-card">
+  <div class="card-stack">
+    <p class="eyebrow">{t(locale, "form_eyebrow")}</p>
+    <h2>{t(locale, "form_title")}</h2>
+    <p>{t(locale, "form_intro")}</p>
+  </div>
+
+  <form class="form-grid" id="inquiry-form">
+    <label>
+      {t(locale, "form_company")}
+      <input
+        id="company"
+        name="company"
+        type="text"
+        placeholder={t(locale, "form_company_placeholder")}
+        autocomplete="organization"
+        required
+      />
+    </label>
+    <label>
+      {t(locale, "form_contact_name")}
+      <input
+        id="contactName"
+        name="contactName"
+        type="text"
+        placeholder={t(locale, "form_contact_name_placeholder")}
+        autocomplete="name"
+        required
+      />
+    </label>
+    <label>
+      {t(locale, "form_email")}
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="name@company.com"
+        autocomplete="email"
+        required
+      />
+    </label>
+    <label>
+      {t(locale, "form_volume")}
+      <input id="volume" name="volume" type="text" placeholder={t(locale, "form_volume_placeholder")} />
+    </label>
+    <label>
+      {t(locale, "form_panel")}
+      <input
+        id="panel"
+        name="panel"
+        type="text"
+        placeholder={t(locale, "form_panel_placeholder")}
+      />
+    </label>
+    <label>
+      {t(locale, "form_signal")}
+      <input
+        id="signal"
+        name="signal"
+        type="text"
+        placeholder={t(locale, "form_signal_placeholder")}
+      />
+    </label>
+    <label>
+      {t(locale, "form_control")}
+      <input
+        id="control"
+        name="control"
+        type="text"
+        placeholder={t(locale, "form_control_placeholder")}
+      />
+    </label>
+    <label class="form-full">
+      {t(locale, "form_scope")}
+      <textarea
+        id="message"
+        name="message"
+        rows="6"
+        placeholder={t(locale, "form_scope_placeholder")}
+      ></textarea>
+    </label>
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">{t(locale, "form_submit")}</button>
+      <p class="form-note">
+        {t(locale, "form_note_prefix")}
+        <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
+      </p>
+    </div>
+  </form>
+</div>
+
+<script
+  define:vars={{
+    contactEmail: siteConfig.contactEmail,
+    subjectPrefix: t(locale, "email_subject_prefix"),
+    subjectFallback: t(locale, "email_subject_fallback"),
+    labelCompany: t(locale, "form_company"),
+    labelContact: t(locale, "form_contact_name"),
+    labelEmail: t(locale, "form_email"),
+    labelVolume: t(locale, "form_volume"),
+    labelPanel: t(locale, "form_panel"),
+    labelSignal: t(locale, "form_signal"),
+    labelControl: t(locale, "form_control"),
+    labelScope: t(locale, "email_body_scope")
+  }}
+  is:inline
+>
+  const form = document.querySelector("#inquiry-form");
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const getValue = (id) => {
+        const field = document.getElementById(id);
+        return field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement
+          ? field.value.trim()
+          : "";
+      };
+
+      const subject = encodeURIComponent(`${subjectPrefix} | ${getValue("company") || subjectFallback}`);
+      const body = encodeURIComponent(
+        [
+          `${labelCompany}: ${getValue("company")}`,
+          `${labelContact}: ${getValue("contactName")}`,
+          `${labelEmail}: ${getValue("email")}`,
+          `${labelVolume}: ${getValue("volume")}`,
+          `${labelPanel}: ${getValue("panel")}`,
+          `${labelSignal}: ${getValue("signal")}`,
+          `${labelControl}: ${getValue("control")}`,
+          "",
+          labelScope,
+          getValue("message")
+        ].join("\n")
+      );
+
+      window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+    });
+  }
+</script>

@@ -1,0 +1,125 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { siteConfig } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "TriView Electronics Compliance",
+  url: `${siteConfig.siteUrl}/compliance`,
+  description:
+    "Compliance and quality statements for TriView Electronics display controller and integration programs."
+};
+
+const complianceTopics = [
+  {
+    title: "Quality and change discipline",
+    body:
+      "For long-life OEM programs, the main risk is uncontrolled drift: silent substitutions, undocumented revisions, and late-stage behavior changes. TriView frames quality around revision/BOM clarity, documented validation steps, and controlled handoff into production."
+  },
+  {
+    title: "Documentation and traceability",
+    body:
+      "A practical compliance posture starts with traceability. TriView encourages customers to include panel model, host interface, and mechanical constraints early so that recommendations can be documented and later reproduced during repeat orders or service events."
+  },
+  {
+    title: "Supply continuity planning",
+    body:
+      "Industrial buyers often prioritize continuity over novelty. TriView emphasizes preferred-part selection, alternate sourcing logic (when applicable), and customer communication to reduce unexpected redesign pressure."
+  },
+  {
+    title: "Export, usage, and customer responsibility",
+    body:
+      "Customers are responsible for confirming application-level compliance requirements in their markets (e.g., safety, EMC, environmental, regulatory). TriView can support technical documentation and engineering coordination, but final product certification is typically owned by the OEM/product owner."
+  }
+];
+
+const disclaimers = [
+  "This page provides general statements and does not constitute legal advice.",
+  "Final compliance obligations depend on the customer’s product, deployment market, and certification scope.",
+  "Project-specific compliance documentation may be provided under NDA based on program requirements."
+];
+---
+
+<MainLayout
+  title="Compliance"
+  description="Compliance and quality statements for TriView Electronics controller-board and display integration programs."
+  path="/compliance"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Compliance"
+    title="Compliance and quality statements for long-life OEM display programs"
+    intro="B2B buyers often need more than product specs. They need to understand how a supplier approaches revision control, validation rhythm, and documentation discipline."
+    highlight="This page is a starting point. Project-specific compliance documentation is usually handled per program and may require NDA."
+    actions={[
+      { href: "/contact", label: "Request compliance details" },
+      { href: "/interface-summary", label: "View interface summary", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Compliance" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Best for</strong>
+        <span>OEM buyers · industrial programs · replacement projects · long lifecycle products</span>
+      </div>
+      <div>
+        <strong>Related</strong>
+        <span>Revision control · validation rhythm · documentation traceability</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container stack-grid">
+      {complianceTopics.map((item) => (
+        <article class="card">
+          <h2>{item.title}</h2>
+          <p>{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="What to prepare"
+          title="A stronger compliance inquiry starts with basic technical context"
+          intro="If you can share the panel model, host interface, environment constraints, and lifecycle expectations, TriView can respond with a more scoped and auditable recommendation path."
+        />
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="Disclaimers"
+          title="Scope notes"
+          intro="These statements are intentionally high-level to remain accurate across different OEM programs."
+        />
+        <ul class="list-check compact-list">
+          {disclaimers.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Compliance inquiry"
+    title="Need a compliance-oriented response?"
+    body="Send a short program brief, including panel model, host signal, target region, and expected certification scope. TriView can then clarify documentation and validation expectations for the project."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="View capabilities"
+    secondaryHref="/capabilities"
+  />
+</MainLayout>

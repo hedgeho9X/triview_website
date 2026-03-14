@@ -1,0 +1,130 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import CardMedia from "../../components/CardMedia.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig, solutions } from "../../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "TriView Electronics Solutions",
+  url: `${siteConfig.siteUrl}/solutions`,
+  description:
+    "ODM/OEM solutions for LCD controller boards, legacy panel migration, industrial HMI integration, and commercial display control.",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: solutions.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.siteUrl}/solutions/${item.slug}`,
+      name: item.title
+    }))
+  }
+};
+---
+
+<MainLayout
+  title="Solutions"
+  description="Explore TriView Electronics solution tracks for custom LCD controller board development, legacy panel migration, and industrial display subsystem integration."
+  path="/solutions"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Solutions"
+    title="Service models aligned to how display-driven products are actually built"
+    intro="TriView does more than ship controller boards. The company supports the decision points where engineering scope, lifecycle risk, and manufacturing readiness intersect."
+    highlight="Choose the solution track that best fits your current project stage: new development, lifecycle migration, integrated HMI design, or commercial deployment."
+    actions={[
+      { href: "/contact", label: "Discuss a project" },
+      { href: "/products", label: "Browse product categories", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Solutions" }]} />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="signal"
+      label="Engagement Tracks"
+      subtitle="Custom integration · lifecycle migration · HMI coordination"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>Engagement type</strong>
+        <span>ODM, OEM, custom integration, lifecycle support</span>
+      </div>
+      <div>
+        <strong>Typical outputs</strong>
+        <span>Boards, firmware, cables, validation support, pilot manufacturing</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {solutions.map((item) => (
+        <article class="card card-link">
+          <CardMedia label={item.title} />
+          <p class="eyebrow">{item.kicker}</p>
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check">
+            {item.benefits.slice(0, 3).map((benefit) => (
+              <li>{benefit}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={`/solutions/${item.slug}`}>
+            Open solution page
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="Engineering Building Blocks"
+          title="The work packages that sit underneath each TriView solution"
+          intro="Even when customer goals differ, most successful programs share a common technical backbone."
+        />
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>Controller architecture</h3>
+          <p>Choosing the right chipset and signal path for the actual panel and host system.</p>
+        </article>
+        <article class="card">
+          <h3>Firmware behavior</h3>
+          <p>Configuring EDID, OSD defaults, startup logic, and control response (including RS232/RS485 when needed) to match the product use case.</p>
+        </article>
+        <article class="card">
+          <h3>Harness and connector fit</h3>
+          <p>Solving the practical mechanical and serviceability details that generic kits often ignore.</p>
+        </article>
+        <article class="card">
+          <h3>Validation and release</h3>
+          <p>Turning a working sample into a stable production package with fewer hidden assumptions.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Need Guidance"
+    title="Start with the problem, not the part number."
+    body="If your team is still evaluating panel choices, signal conversion, or the right control architecture, TriView can help narrow the path before cost and schedule drift increase."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="Explore products"
+    secondaryHref="/products"
+  />
+</MainLayout>

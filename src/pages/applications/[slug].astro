@@ -1,0 +1,119 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { applicationTracks, siteConfig, type ApplicationTrack } from "../../data/site";
+
+export function getStaticPaths() {
+  return applicationTracks.map((track) => ({
+    params: { slug: track.slug },
+    props: { track }
+  }));
+}
+
+const { track } = Astro.props as { track: ApplicationTrack };
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: track.title,
+  url: `${siteConfig.siteUrl}/applications/${track.slug}`,
+  description: track.seoDescription
+};
+---
+
+<MainLayout
+  title={track.title}
+  description={track.seoDescription}
+  path={`/applications/${track.slug}`}
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Application Track"
+    title={track.title}
+    intro={track.summary}
+    highlight="Application-led navigation helps B2B buyers move from project situation to the right engineering path faster than hardware taxonomy alone."
+    actions={[
+      { href: "/contact", label: "Discuss this application" },
+      { href: "/applications", label: "Back to applications", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Applications", href: "/applications" },
+          { label: track.title }
+        ]}
+      />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Common needs</strong>
+        <span>{track.needs.slice(0, 2).join(" · ")}</span>
+      </div>
+      <div>
+        <strong>Why this path</strong>
+        <span>{track.fit}</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split-grid split-grid-balanced">
+      <article class="card">
+        <SectionHeading
+          eyebrow="Buyer Needs"
+          title="What teams are usually trying to solve"
+          intro="The right display route depends on the operational problem behind the inquiry, not only on the part name."
+        />
+        <ul class="list-check compact-list">
+          {track.needs.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="card card-emphasis">
+        <SectionHeading
+          eyebrow="TriView Fit"
+          title="Where TriView can add more value"
+          intro="Projects in this category often need a tighter connection between board choice, cables, touch behavior, and qualification timing."
+        />
+        <p>{track.fit}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container stack-grid">
+      <article class="card">
+        <h3>Recommended inquiry inputs</h3>
+        <p>
+          To shorten review time, share the panel model, host signal, mechanical limits, target volume,
+          deployment environment, and whether the project is a replacement or a net-new design.
+        </p>
+      </article>
+      <article class="card">
+        <h3>Why application pages matter for procurement teams</h3>
+        <p>
+          Buyers often begin with a project constraint rather than a product category. Application pages reduce friction
+          by connecting that situation to the right combination of products, solutions, and industry context.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Next Step"
+    title={`Evaluating a ${track.title.toLowerCase()} project?`}
+    body="A short technical brief at the start usually avoids more expensive redesign work later. TriView can help narrow a better-fit evaluation path early."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="See solutions"
+    secondaryHref="/solutions"
+  />
+</MainLayout>

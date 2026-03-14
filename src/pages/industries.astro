@@ -1,0 +1,132 @@
+---
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import CallToAction from "../components/CallToAction.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { industryPages, siteConfig } from "../data/site";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "TriView Electronics Industries",
+  url: `${siteConfig.siteUrl}/industries`,
+  description:
+    "Industry-specific display integration support for industrial automation, medical devices, laboratories, kiosks, and commercial display programs.",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: industryPages.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.siteUrl}/industries#${item.slug}`,
+      name: item.title
+    }))
+  }
+};
+---
+
+<MainLayout
+  title="Industries"
+  description="See how TriView Electronics supports industrial automation, medical devices, laboratory systems, and kiosk display programs with controller, touch, and integration expertise."
+  path="/industries"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="Industries"
+    title="Industry context matters as much as the controller board itself"
+    intro="Display projects fail for different reasons in different markets. TriView’s value is stronger when the technical solution is matched to lifecycle, service, and deployment realities."
+    highlight="Use these industry snapshots to understand where controller selection, cable planning, firmware behavior, and lifecycle support matter most."
+    actions={[
+      { href: "/contact", label: "Discuss your application" },
+      { href: "/solutions", label: "View solution tracks", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Industries" }]} />
+    </Fragment>
+
+    <div class="info-stack">
+      <div>
+        <strong>Focus areas</strong>
+        <span>Industrial OEM, medical/lab, kiosks, embedded display integration</span>
+      </div>
+      <div>
+        <strong>Common priorities</strong>
+        <span>Lifecycle control, stable integration, better serviceability, lower deployment risk</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container card-grid">
+      {industryPages.map((item) => (
+        <article class="card card-link" id={item.slug}>
+          <p class="eyebrow">{item.kicker}</p>
+          <h2>{item.title}</h2>
+          <p>{item.summary}</p>
+          <ul class="list-check compact-list">
+            {item.challenges.slice(0, 3).map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+          <a class="text-link" href={`/industries/${item.slug}`}>
+            Open industry page
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container stack-grid">
+      {industryPages.map((item) => (
+        <section class="card industry-deep-dive">
+          <SectionHeading
+            eyebrow={item.kicker}
+            title={item.title}
+            intro={item.summary}
+          />
+
+          <div class="triple-grid">
+            <article class="card">
+              <h3>Typical challenges</h3>
+              <ul class="list-check compact-list">
+                {item.challenges.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>What buyers usually prioritize</h3>
+              <ul class="list-check compact-list">
+                {item.priorities.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+
+            <article class="card card-emphasis">
+              <h3>Where TriView fits</h3>
+              <ul class="list-check compact-list">
+                {item.triViewFit.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="Application Review"
+    title="Not sure which route fits your industry program best?"
+    body="Share the panel model, host interface, operating environment, and lifecycle concerns. TriView can help narrow the right board, cable, and integration path before your team commits to the wrong architecture."
+    primaryLabel="Contact TriView"
+    primaryHref="/contact"
+    secondaryLabel="Browse products"
+    secondaryHref="/products"
+  />
+</MainLayout>

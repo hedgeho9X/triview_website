@@ -1,0 +1,44 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  body: string;
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  body,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref
+} = Astro.props;
+---
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        <h2>{title}</h2>
+        <p>{body}</p>
+      </div>
+
+      <div class="button-row">
+        <a class="button button-primary" href={primaryHref}>
+          {primaryLabel}
+        </a>
+        {secondaryLabel && secondaryHref && (
+          <a class="button button-secondary" href={secondaryHref}>
+            {secondaryLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

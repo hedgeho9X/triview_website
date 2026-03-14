@@ -1,0 +1,50 @@
+---
+interface Action {
+  href: string;
+  label: string;
+  variant?: "primary" | "secondary";
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro: string;
+  highlight?: string;
+  actions?: Action[];
+}
+
+const { eyebrow, title, intro, highlight, actions = [] } = Astro.props;
+---
+
+<section class="section section-tight">
+  <div class="container page-hero-grid">
+    <div>
+      <slot name="breadcrumbs" />
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      <p class="hero-lead">{intro}</p>
+      {actions.length > 0 && (
+        <div class="button-row">
+          {actions.map((action) => (
+            <a
+              class={action.variant === "secondary" ? "button button-secondary" : "button button-primary"}
+              href={action.href}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="hero-panel">
+      {highlight && (
+        <>
+          <p class="eyebrow">At a Glance</p>
+          <p class="hero-panel-copy">{highlight}</p>
+        </>
+      )}
+      <slot />
+    </div>
+  </div>
+</section>

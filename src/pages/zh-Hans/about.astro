@@ -1,0 +1,249 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CallToAction from "../../components/CallToAction.astro";
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import VisualPlaceholder from "../../components/VisualPlaceholder.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { siteConfig } from "../../data/site";
+import { getLocaleFromUrl, withLocale } from "../../i18n/routing";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+
+const aboutMilestones = [
+  {
+    year: "成立",
+    title: "以显示控制经验为核心",
+    description: "宇睿的定位围绕 LCD 控制板与整合支持，而不是通用型目录分销。"
+  },
+  {
+    year: "扩展",
+    title: "从单板供货走向子系统支持",
+    description: "触控模组、定制线束与整合导向的表述，反映宇睿更关注真实部署路径，而不止是出货。"
+  },
+  {
+    year: "当前方向",
+    title: "更接近 ODM/OEM 显示整合伙伴",
+    description: "对需要适配、生命周期连续性与技术协同能力的嵌入式与工业显示项目，匹配度最强。"
+  }
+];
+
+const qualityPoints = [
+  {
+    title: "版本与 BOM 控制",
+    description: "明确的物料确认与版本追踪，降低长生命周期项目出现“静默替换”的风险。"
+  },
+  {
+    title: "功能性验证",
+    description: "在放行前验证信号稳定性、图像质量、触控行为、线束走线与结构兼容性。"
+  },
+  {
+    title: "供货连续性规划",
+    description: "优选料号、备选逻辑与客户沟通机制，帮助关键项目保持可持续推进。"
+  },
+  {
+    title: "快速响应的工程支持",
+    description: "提供直接的技术反馈而不是 reseller 式的通用答复，适合非标准显示堆栈。"
+  }
+];
+
+const differentiators = [
+  {
+    title: "板卡 + 线束 + 固件纳入同一范围",
+    description: "将显示控制视为一体化工程包，降低控制行为、线束设计与装配之间的不匹配。"
+  },
+  {
+    title: "更适合替换与迁移类项目",
+    description: "面对原有面板、AD 板或接口路径逐渐老化的项目，能给出更稳定的替换策略与验证节奏。"
+  },
+  {
+    title: "低到中等量产的务实能力",
+    description: "不仅追求大规模目录销售，更重视工业项目所需的文档、支持与可预测的版本管理。"
+  },
+  {
+    title: "台湾基地的协同优势",
+    description: "对国际 B2B 客户而言，台湾运营基地通常有利于沟通、采购协调与制造跟进。"
+  }
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: `关于 ${siteConfig.name}`,
+  url: `${siteConfig.siteUrl}/zh-Hans/about`,
+  description: "关于宇睿电子：专注 LCD 控制板、AD 板与工业显示整合的台南 ODM/OEM 伙伴。"
+};
+---
+
+<MainLayout
+  title="关于我们"
+  description="了解宇睿电子如何开展 LCD 控制板设计、ODM/OEM 显示整合与长生命周期工业客户支持。"
+  structuredData={structuredData}
+>
+  <PageHero
+    eyebrow="关于宇睿"
+    title="立足台南的显示电子伙伴，面向长生命周期 OEM 项目"
+    intro="宇睿电子将控制板专长与务实的整合支持结合，让 OEM 团队更快推进，同时保持工程可控。"
+    highlight="当通用显示板带来额外验证、结构妥协或生命周期不确定时，宇睿的价值更明显。"
+    actions={[
+      { href: withLocale(locale, "/contact"), label: "预约沟通" },
+      { href: withLocale(locale, "/products"), label: "查看产品", variant: "secondary" }
+    ]}
+  >
+    <Fragment slot="breadcrumbs">
+      <Breadcrumbs
+        items={[
+          { label: "首页", href: withLocale(locale, "/") },
+          { label: "关于我们" }
+        ]}
+      />
+    </Fragment>
+
+    <VisualPlaceholder
+      variant="grid"
+      label="台南合作伙伴"
+      subtitle="流程纪律 · 版本控制 · 长生命周期支持"
+      decorative={true}
+    />
+
+    <div class="info-stack">
+      <div>
+        <strong>运营基地</strong>
+        <span>台南, 台湾</span>
+      </div>
+      <div>
+        <strong>核心方向</strong>
+        <span>LCD 控制板、AD 板、面板匹配、OSD 定制、RS232/RS485 控制、触控整合、线缆线束</span>
+      </div>
+      <div>
+        <strong>客户类型</strong>
+        <span>工业、医疗、自助终端、交通与嵌入式 OEM 团队</span>
+      </div>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div class="card card-emphasis">
+        <p class="eyebrow">公司概览</p>
+        <h2>宇睿为什么存在</h2>
+        <p>
+          很多显示项目停滞，并不是因为缺少某个部件，而是采购、固件行为、线束走线与结构要求被当成彼此独立的问题。
+          宇睿用聚焦的显示控制流程把这些缺口补齐，让 OEM 执行更接近“可控交付”。
+        </p>
+        <p>
+          结果是采购团队更容易得到明确报价与边界，工程团队也更容易把样品验证推进到稳定的量产放行。
+        </p>
+      </div>
+
+      <div class="stack-grid">
+        {qualityPoints.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-contrast">
+    <div class="container">
+      <SectionHeading
+        eyebrow="演进"
+        title="从单板能力走向对显示整合的更高负责度"
+        intro="宇睿的运营模型围绕客户最需要支持的真实节点扩展，尤其是替换迁移与定制整合。"
+      />
+
+      <div class="card card-emphasis">
+        <p class="eyebrow">行业演进</p>
+        <h3>接口在演进，但长生命周期项目仍需要连续性</h3>
+        <p>
+          专业显示项目很少因为某一个部件缺失而失败。更常见的是在原型到量产之间，
+          <strong>接口</strong>、<strong>固件行为</strong> 与 <strong>部署约束</strong> 发生偏移，导致返工与进度失控。
+        </p>
+        <p>
+          如今面板侧常见接口包括 <strong>LVDS</strong>、<strong>eDP</strong> 与 <strong>V-by-One</strong>；而主机侧仍可能同时需要
+          <strong>HDMI</strong>、<strong>DisplayPort</strong>、<strong>DVI</strong>、<strong>VGA</strong> 与 <strong>USB-C</strong> 的混合支持。
+        </p>
+        <p>
+          因此宇睿的范围强调 <strong>面板匹配</strong>、<strong>OSD 定制</strong> 与按需的 <strong>RS232/RS485</strong> 控制整合，
+          让子系统在试产与重复订单中保持可预测行为。
+        </p>
+      </div>
+
+      <div class="timeline-grid">
+        {aboutMilestones.map((item) => (
+          <article class="timeline-card">
+            <span class="timeline-tag">{item.year}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid split-grid-balanced">
+      <div>
+        <SectionHeading
+          eyebrow="差异化"
+          title="为什么宇睿可能比“通用控制板供货商”更匹配"
+          intro="价值不仅在于供货，而在于把通常造成 OEM 进度漂移的整合细节纳入可控范围。"
+        />
+      </div>
+
+      <div class="stack-grid">
+        {differentiators.map((item) => (
+          <article class="card">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split-grid">
+      <div>
+        <SectionHeading
+          eyebrow="合作方式"
+          title="以制造落地为导向的项目协同"
+          intro="宇睿的流程旨在降低报价、验证、试产与重复订单执行中的跨职能混乱。"
+        />
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <h3>前置工程清晰度</h3>
+          <p>在设计路径固化之前，对齐面板、信号、线束、触控与结构要求，降低后期意外。</p>
+        </article>
+        <article class="card">
+          <h3>面向量产的验证</h3>
+          <p>把样品通过视为可控放行规划的起点，而不是项目结束点。</p>
+        </article>
+        <article class="card">
+          <h3>适配 OEM 团队的沟通方式</h3>
+          <p>以技术讨论、版本纪律与 RFQ 响应为核心，匹配 B2B 团队协作节奏。</p>
+        </article>
+        <article class="card">
+          <h3>生命周期意识</h3>
+          <p>理解长生命周期产品的替换规划与连续性需求，关注变更对现场设备的实际影响。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    eyebrow="合作匹配"
+    title="如果你的产品依赖稳定的显示子系统，建议尽早评估宇睿。"
+    body="在控制板选型或面板迁移变成进度问题前介入讨论，通常能得到更好的工程选项与验证路径。"
+    primaryLabel="联系团队"
+    primaryHref={withLocale(locale, "/contact")}
+    secondaryLabel="查看解决方案"
+    secondaryHref={withLocale(locale, "/solutions")}
+  />
+</MainLayout>
+

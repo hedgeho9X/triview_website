@@ -1,0 +1,147 @@
+---
+import { navigationPrimary, navigationSecondary, siteConfig } from "../data/site";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { getLocaleFromUrl, stripLocaleFromUrl, withLocale } from "../i18n/routing";
+import { t } from "../i18n/ui";
+
+const locale = getLocaleFromUrl(Astro.url.pathname);
+const currentPath = Astro.url.pathname;
+const currentBasePath = stripLocaleFromUrl(currentPath);
+
+const localNameLang = locale === "zh-Hant" ? "zh-Hant" : "zh-Hans";
+
+const isActive = (href: string) => {
+  if (href === "/") {
+    return currentBasePath === "/";
+  }
+
+  return currentBasePath === href || currentBasePath.startsWith(`${href}/`);
+};
+---
+
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a class="brand" href={withLocale(locale, "/")} aria-label={`${siteConfig.name} homepage`}>
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <strong>{siteConfig.name}</strong>
+        <small>
+          <span lang={localNameLang}>{t(locale, "brand_local")}</span>
+          <span class="brand-divider" aria-hidden="true">·</span>
+          <span>{t(locale, "brand_tagline")}</span>
+        </small>
+      </span>
+    </a>
+
+    <nav class="site-nav site-nav-desktop" aria-label="Primary">
+      {navigationPrimary.map((item) => (
+        <a
+          class={isActive(item.href) ? "nav-link active" : "nav-link"}
+          href={withLocale(locale, item.href)}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          {t(locale, item.labelKey)}
+        </a>
+      ))}
+
+      <details class="nav-more">
+        <summary class="nav-link nav-more-trigger">{t(locale, "nav_more")}</summary>
+        <div class="nav-more-panel" role="menu" aria-label="Secondary">
+          {navigationSecondary.map((item) => (
+            <a
+              class={isActive(item.href) ? "nav-more-link active" : "nav-more-link"}
+              href={withLocale(locale, item.href)}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              role="menuitem"
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))}
+        </div>
+      </details>
+    </nav>
+
+    <div class="header-actions">
+      <LanguageSwitcher />
+      <a class="button button-primary header-cta" href={withLocale(locale, "/contact")}>
+        {t(locale, "cta_quote")}
+      </a>
+    </div>
+
+    <details class="site-nav-mobile">
+      <summary class="nav-toggle" aria-label="Open menu">
+        <span aria-hidden="true" class="nav-toggle-bars"></span>
+      </summary>
+      <div class="nav-drawer" role="dialog" aria-label="Site menu">
+        <div class="nav-drawer-top">
+          <span class="nav-drawer-title">{t(locale, "nav_menu")}</span>
+          <button class="nav-close" type="button" aria-label="Close menu">
+            {t(locale, "nav_close")}
+          </button>
+        </div>
+
+        <LanguageSwitcher />
+
+        <a class="button button-primary nav-drawer-cta" href={withLocale(locale, "/contact")}>
+          {t(locale, "cta_start_rfq")}
+        </a>
+
+        <nav class="nav-drawer-links" aria-label="Mobile primary navigation">
+          {navigationPrimary.map((item) => (
+            <a
+              class={isActive(item.href) ? "drawer-link active" : "drawer-link"}
+              href={withLocale(locale, item.href)}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))}
+        </nav>
+
+        <div class="nav-drawer-divider" role="separator" aria-hidden="true"></div>
+
+        <nav class="nav-drawer-links" aria-label="Mobile secondary navigation">
+          {navigationSecondary.map((item) => (
+            <a
+              class={isActive(item.href) ? "drawer-link active" : "drawer-link"}
+              href={withLocale(locale, item.href)}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script is:inline>
+  const mobileNav = document.querySelector(".site-nav-mobile");
+
+  if (mobileNav instanceof HTMLDetailsElement) {
+    const close = () => {
+      mobileNav.open = false;
+    };
+
+    const drawer = mobileNav.querySelector(".nav-drawer");
+    const closeButton = mobileNav.querySelector(".nav-close");
+    if (closeButton instanceof HTMLButtonElement) {
+      closeButton.addEventListener("click", close);
+    }
+
+    mobileNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", close);
+    });
+
+    if (drawer instanceof HTMLElement) {
+      drawer.addEventListener("click", (event) => {
+        if (event.target === drawer) close();
+      });
+    }
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") close();
+    });
+  }
+</script>
